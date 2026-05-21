@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鱼秋设计个人工作站</title>
+  <meta name="description" content="鱼秋设计个人工作站，专注个人品牌网站、AI 创意落地页、小红书内容视觉和定制交互网页。用审美和技术构建无限可能的 AI 创意。">
+  <meta name="keywords" content="个人品牌网站,AI 创意落地页,小红书内容视觉,交互网页,鱼秋设计">
+  <meta name="author" content="鱼秋设计个人工作站">
+  <meta name="theme-color" content="#0c1512">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="鱼秋设计个人工作站">
+  <meta property="og:description" content="用审美和技术构建无限可能的 AI 创意。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="noise-layer" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#hero" aria-label="Back to top">
+        <span class="brand-mark"></span>
+        <span>鱼秋设计个人工作站</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#stack">Services</a>
+        <a href="#notes">Notes</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="lang-chip">EN / 中文</div>
+    </header>
+
+    <aside class="scroll-index" aria-label="Page sections">
+      <a href="#hero" data-section="01">Hero</a>
+      <a href="#about" data-section="02">About</a>
+      <a href="#work" data-section="03">Work</a>
+      <a href="#stack" data-section="04">Services</a>
+      <a href="#notes" data-section="05">Notes</a>
+      <a href="#process" data-section="06">Process</a>
+      <a href="#contact" data-section="07">Contact</a>
+    </aside>
+
+    <main>
+      <section class="hero section-panel" id="hero">
+        <div class="hero-frame" data-parallax-root>
+          <div class="hero-frame-nav">
+            <a class="mini-brand" href="#hero">✦ 鱼秋设计个人工作站</a>
+            <div class="mini-links" aria-label="Hero links">
+              <a href="#work">Work</a>
+              <a href="#notes">Notes</a>
+              <a href="#contact">Contact</a>
+            </div>
+            <button class="mini-menu" type="button" aria-label="Menu">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+
+          <div class="hero-copy" data-depth="0.018">
+            <p class="eyebrow">Yuqiu Design Lab / 鱼秋设计实验室</p>
+            <h1 class="glitch-title" data-glitch-title>Building aesthetic systems for useful AI and digital experiences.</h1>
+            <p class="hero-cn">用审美和技术构建无限可能的 AI 创意。</p>
+            <div class="hero-actions">
+              <a class="button primary" href="#work">进入作品集</a>
+              <a class="button ghost" href="#contact">合作咨询</a>
+            </div>
+          </div>
+
+          <div class="site-preview-window" data-depth="0.038" aria-hidden="true">
+            <div class="preview-chrome">
+              <span></span><span></span><span></span>
+              <strong>yuqiu.design/studio</strong>
+            </div>
+            <div class="preview-stage">
+              <div class="preview-menu">
+                <span>Brand</span>
+                <span>AI</span>
+                <span>Content</span>
+              </div>
+              <div class="preview-title">Creative systems<br>for visible ideas</div>
+              <div class="preview-card">prompt -> page<br>taste -> trust</div>
+              <div class="preview-orbit"></div>
+            </div>
+          </div>
+
+          <div class="material-object" data-depth="0.055" aria-hidden="true">
+            <span class="material-core"></span>
+            <span class="material-sheen"></span>
+            <span class="material-node node-a"></span>
+            <span class="material-node node-b"></span>
+          </div>
+
+          <div class="work-fragment fragment-paper" data-depth="0.04" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="work-fragment fragment-code" data-depth="0.075" aria-label="Creative system notes">
+            <p>prompt -> page</p>
+            <p>design -> system</p>
+            <p>case -> content</p>
+          </div>
+
+          <div class="work-fragment fragment-tag" data-depth="0.03" aria-hidden="true">
+            <span>scan: material / system / taste</span>
+          </div>
+
+          <div class="work-fragment fragment-card" data-depth="0.065" aria-hidden="true">
+            <strong>01</strong>
+            <span>visual logic</span>
+          </div>
+
+          <div class="scroll-cue" aria-hidden="true">
+            <span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section decomposed-section about-deck" id="about">
+        <div class="section-heading reveal">
+          <p class="section-number">02 / About</p>
+          <h2>About me / 关于我</h2>
+        </div>
+        <div class="about-grid">
+          <article class="large-card paper-note reveal">
+            <div class="paper-pin" aria-hidden="true"></div>
+            <h3>我把审美判断、AI 工具和网页技术结合起来，让个人品牌从想法变成可展示、可传播、可接单的数字资产。</h3>
+            <p>I build visually distinctive websites and AI-powered creative pages for personal brands, creators, and small teams. My work connects positioning, visual direction, interaction details, and practical delivery so each page feels polished at first glance and useful after the first click.</p>
+            <p>我专注于个人品牌网站、AI 创意落地页和内容视觉系统。相比只做一个“好看的页面”，我更在意它是否能说清楚你是谁、你能提供什么、别人为什么愿意继续了解你，并把这种专业感落到结构、视觉和交互里。</p>
+          </article>
+          <div class="quote-card scan-card reveal">
+            <p class="quote">“审美负责第一眼，技术负责把想法真正落地。”</p>
+            <span>Design principle / 创作原则</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section decomposed-section work-island" id="work">
+        <div class="section-heading reveal">
+          <p class="section-number">03 / Selected Work</p>
+          <h2>Selected work / 作品项目</h2>
+        </div>
+        <div class="work-grid">
+          <article class="work-card project-board reveal">
+            <div class="work-visual visual-a" aria-hidden="true">
+              <div class="visual-chrome"><i></i><i></i><i></i><b>brand.site</b></div>
+              <span>Brand Site</span>
+            </div>
+            <div>
+              <p class="tagline">Personal Brand Website / 个人品牌网站</p>
+              <h3>个人品牌工作站</h3>
+              <p>为设计师、创作者、自由职业者和接单型个人 IP 搭建单页网站，用定位、视觉和交互把专业度在第一屏讲清楚。</p>
+              <div class="work-meta">
+                <span>身份定位</span>
+                <span>首屏视觉</span>
+                <span>合作入口</span>
+              </div>
+            </div>
+          </article>
+          <article class="work-card project-board reveal">
+            <div class="work-visual visual-b" aria-hidden="true">
+              <div class="visual-chrome"><i></i><i></i><i></i><b>ai.launch</b></div>
+              <span>AI Page</span>
+            </div>
+            <div>
+              <p class="tagline">AI Creative Landing Page / AI 创意落地页</p>
+              <h3>AI 创意项目发布页</h3>
+              <p>把 AI 工具、AI 副业、AI 教程或产品想法包装成能被看懂、能被信任、能引导咨询的展示页面。</p>
+              <div class="work-meta">
+                <span>卖点梳理</span>
+                <span>体验叙事</span>
+                <span>咨询转化</span>
+              </div>
+            </div>
+          </article>
+          <article class="work-card project-board reveal">
+            <div class="work-visual visual-c" aria-hidden="true">
+              <div class="visual-chrome"><i></i><i></i><i></i><b>rednote.kit</b></div>
+              <span>Content System</span>
+            </div>
+            <div>
+              <p class="tagline">Rednote Visual System / 小红书内容视觉</p>
+              <h3>小红书内容视觉系统</h3>
+              <p>为小红书新号、课程账号和案例型内容设计封面风格、栏目结构和内容包装方式，让账号从第一篇开始更统一。</p>
+              <div class="work-meta">
+                <span>封面模板</span>
+                <span>栏目结构</span>
+                <span>账号气质</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section decomposed-section stack-lab" id="stack">
+        <div class="section-heading reveal">
+          <p class="section-number">04 / Services</p>
+          <h2>Services / 服务套餐</h2>
+        </div>
+        <div class="stack-grid">
+          <article class="stack-item service-card code-module reveal">
+            <span>01</span>
+            <h3>个人品牌网站</h3>
+            <p>适合个人 IP、自由职业者、设计师、知识博主，把个人介绍、作品展示和合作入口整合成一个有质感的网站。</p>
+            <ul>
+              <li>个人定位与页面文案梳理</li>
+              <li>首屏视觉、作品区、联系区设计</li>
+              <li>电脑端与手机端响应式页面</li>
+            </ul>
+          </article>
+          <article class="stack-item service-card code-module reveal">
+            <span>02</span>
+            <h3>AI 创意落地页</h3>
+            <p>适合 AI 工具、AI 副业、课程、教程和产品想法，把抽象概念做成能被理解、被收藏、被咨询的页面。</p>
+            <ul>
+              <li>产品卖点与使用场景梳理</li>
+              <li>落地页视觉与内容节奏设计</li>
+              <li>Demo 展示、按钮路径与咨询入口</li>
+            </ul>
+          </article>
+          <article class="stack-item service-card code-module reveal">
+            <span>03</span>
+            <h3>小红书内容视觉</h3>
+            <p>适合新账号冷启动、案例库、教程号和接单号，先把账号的视觉气质、栏目结构和封面风格统一起来。</p>
+            <ul>
+              <li>账号定位与视觉关键词</li>
+              <li>封面模板、栏目模板、标题样式</li>
+              <li>案例拆解与接单内容包装</li>
+            </ul>
+          </article>
+          <article class="stack-item service-card code-module reveal">
+            <span>04</span>
+            <h3>定制交互网页</h3>
+            <p>适合想做强视觉首页、互动作品集、活动页或品牌展示页的项目，用动效和交互强化第一眼记忆点。</p>
+            <ul>
+              <li>鼠标跟随、文字扰动、滚动动效</li>
+              <li>电脑端/移动端视觉适配</li>
+              <li>上线文件、替换说明与修改建议</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section decomposed-section notes-paper" id="notes">
+        <div class="section-heading reveal">
+          <p class="section-number">05 / Notes</p>
+          <h2>Notes / 内容沉淀</h2>
+        </div>
+        <div class="notes-list paper-index">
+          <a class="note-row reveal" href="#notes">
+            <span>01</span>
+            <div class="note-copy">
+              <strong>个人网站第一眼高级感从哪里来</strong>
+              <small>拆解定位、字体、版式、首屏动效和信息节奏，记录一个网站为什么看起来专业。</small>
+            </div>
+            <em>Brand site / 审美拆解</em>
+          </a>
+          <a class="note-row reveal" href="#notes">
+            <span>02</span>
+            <div class="note-copy">
+              <strong>AI 创意怎么包装成可接单服务</strong>
+              <small>把工具能力翻译成客户能理解的价值、案例页面、服务套餐和咨询入口。</small>
+            </div>
+            <em>AI service / 接单转化</em>
+          </a>
+          <a class="note-row reveal" href="#notes">
+            <span>03</span>
+            <div class="note-copy">
+              <strong>从灵感参考到真实网页的制作流程</strong>
+              <small>记录如何提炼参考图的视觉语言，并转换成能适配电脑和手机的真实网页模块。</small>
+            </div>
+            <em>Case breakdown / 案例复盘</em>
+          </a>
+        </div>
+      </section>
+
+      <section class="content-section decomposed-section process-map" id="process">
+        <div class="section-heading reveal">
+          <p class="section-number">06 / Process</p>
+          <h2>Process / 工作方式</h2>
+        </div>
+        <div class="process-line route-map">
+          <div class="process-step reveal">
+            <span>01</span>
+            <h3>需求沟通</h3>
+            <p>先确认你是谁、想吸引谁、希望别人看完采取什么行动，再整理参考风格、页面内容和合作目标。</p>
+            <small>输出：定位方向 / 内容清单 / 参考风格</small>
+          </div>
+          <div class="process-step reveal">
+            <span>02</span>
+            <h3>风格提案</h3>
+            <p>围绕首屏气质、字体、色彩、版式和交互感觉做方向确认，让审美先对味，再进入完整制作。</p>
+            <small>输出：视觉关键词 / 首屏方向 / 页面节奏</small>
+          </div>
+          <div class="process-step reveal">
+            <span>03</span>
+            <h3>设计制作</h3>
+            <p>把确认好的方向做成真实网页，完成内容模块、响应式适配、动效细节和必要的交互状态。</p>
+            <small>输出：完整页面 / 交互动效 / 手机适配</small>
+          </div>
+          <div class="process-step reveal">
+            <span>04</span>
+            <h3>测试交付</h3>
+            <p>检查电脑端与移动端体验，修正文字、间距和链接细节，交付可上线文件，并说明后续如何替换内容。</p>
+            <small>输出：上线文件 / 替换说明 / 修改建议</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section decomposed-section" id="contact">
+        <div class="contact-inner material-contact reveal">
+          <div class="contact-layout">
+            <div class="contact-copy">
+              <p class="section-number">07 / Contact</p>
+              <h2>Let's build something with taste and utility.</h2>
+              <p>如果你想把个人品牌、AI 创意项目或内容账号做得更有审美和专业感，欢迎带着想法来聊。我可以帮你把方向整理成页面、视觉系统和可交付的网页结果。</p>
+              <div class="contact-brief">
+                <div>
+                  <span>适合联系我</span>
+                  <p>个人品牌网站 / AI 创意落地页 / 小红书内容视觉 / 接单展示页 / 定制交互网页</p>
+                </div>
+                <div>
+                  <span>联系前准备</span>
+                  <p>请简单说明你的行业、项目目标、参考风格、预算范围和期望上线时间，越具体越容易快速判断方向。</p>
+                </div>
+              </div>
+              <div class="message-template">
+                <span>第一句话模板</span>
+                <p>你好，我想做一个用于展示作品和接单的页面。我的行业/账号方向是……目前想重点展示……参考风格是……希望在……前完成。</p>
+              </div>
+              <div class="contact-links">
+                <a href="mailto:jinyan6181@qq.com">jinyan6181@qq.com</a>
+                <a href="#wechat">WeChat: A余人</a>
+                <span class="contact-soon">Xiaohongshu / 小红书新号筹备中</span>
+              </div>
+            </div>
+            <figure class="wechat-card" id="wechat">
+              <img src="assets/wechat-qr.jpg" alt="微信二维码：A余人">
+              <figcaption>
+                <strong>扫码添加微信</strong>
+                <span>A余人 · 山东青岛</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
