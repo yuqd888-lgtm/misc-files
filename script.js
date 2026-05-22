@@ -1,8 +1,8 @@
 const canvas = document.getElementById("heroCanvas");
 const isEdge = /\bEdg\//.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const performanceMode = isEdge || prefersReducedMotion;
-const ctx = canvas && !performanceMode ? canvas.getContext("2d", { alpha: true }) : null;
+const useCanvas = !isEdge && !prefersReducedMotion;
+const ctx = canvas && useCanvas ? canvas.getContext("2d", { alpha: true }) : null;
 const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
 const sections = Array.from(document.querySelectorAll("section[id]"));
 const revealItems = Array.from(document.querySelectorAll(".reveal"));
@@ -17,6 +17,7 @@ let canvasFrame = null;
 let canvasVisible = true;
 let scrolling = false;
 let lastCanvasTime = 0;
+let lastActiveUpdate = 0;
 
 let width = 0;
 let height = 0;
@@ -31,7 +32,7 @@ if ("scrollRestoration" in window.history) {
 }
 
 function prepareGlitchTitle() {
-  if (!glitchTitle || performanceMode) return;
+  if (!glitchTitle) return;
   const text = glitchTitle.textContent.trim();
   glitchTitle.dataset.text = text;
   glitchTitle.textContent = "";
@@ -61,8 +62,8 @@ function prepareGlitchTitle() {
 }
 
 function resizeCanvas() {
-  if (!ctx || performanceMode) return;
-  dpr = Math.min(window.devicePixelRatio || 1, 1.6);
+  if (!ctx) return;
+  dpr = prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio || 1, isEdge ? 1.2 : 1.6);
   width = window.innerWidth;
   height = window.innerHeight;
   canvas.width = Math.floor(width * dpr);
@@ -85,7 +86,7 @@ function resizeCanvas() {
 }
 
 function canAnimateCanvas() {
-  return !performanceMode && Boolean(ctx) && canvasVisible && !scrolling && width > 0 && height > 0;
+  return useCanvas && Boolean(ctx) && canvasVisible && !scrolling && width > 0 && height > 0;
 }
 
 function scheduleCanvas() {
@@ -177,7 +178,8 @@ function updateActiveSection() {
 }
 
 function updateHeroScroll() {
-  if (!heroFrame || performanceMode) return;
+  if (!heroFrame) return;
+  if (window.scrollY > window.innerHeight * 1.15) return;
   const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight * 0.72)));
   heroFrame.style.setProperty("--hero-opacity", String(1 - progress * 0.46));
   heroFrame.style.setProperty("--hero-shift", `${progress * 54}px`);
@@ -185,28 +187,46 @@ function updateHeroScroll() {
 }
 
 function handleScroll() {
-  if (!performanceMode) {
-    scrolling = true;
-    if (scrollResumeTimer) {
-      window.clearTimeout(scrollResumeTimer);
-    }
-
-    scrollResumeTimer = window.setTimeout(() => {
-      scrolling = false;
-      scheduleCanvas();
-    }, 120);
+  scrolling = true;
+  if (scrollResumeTimer) {
+    window.clearTimeout(scrollResumeTimer);
   }
+
+  scrollResumeTimer = window.setTimeout(() => {
+    scrolling = false;
+    scheduleCanvas();
+  }, isEdge ? 180 : 120);
 
   if (scrollFrame) return;
   scrollFrame = requestAnimationFrame(() => {
-    updateActiveSection();
+    const now = performance.now();
+    if (!isEdge || now - lastActiveUpdate > 120) {
+      updateActiveSection();
+      lastActiveUpdate = now;
+    }
     updateHeroScroll();
     scrollFrame = null;
   });
 }
 
 function updateParallax(event) {
-  if (!heroFrame || performanceMode) return;
+  if (!heroFrame) return;
+  if (isEdge) {
+    const rect = heroFrame.getBoundingClientRect();
+    const localX = (event.clientX - rect.left) / Math.max(1, rect.width);
+    const localY = (event.clientY - rect.top) / Math.max(1, rect.height);
+    const x = (localX - 0.5) * 2;
+    const y = (localY - 0.5) * 2;
+    const xPercent = localX * 100;
+    const yPercent = localY * 100;
+    heroFrame.style.setProperty("--cursor-x", `${xPercent}%`);
+    heroFrame.style.setProperty("--cursor-y", `${yPercent}%`);
+    heroFrame.style.setProperty("--edge-window-x", `${x * -8}px`);
+    heroFrame.style.setProperty("--edge-window-y", `${y * -6 - 5}px`);
+    heroFrame.style.setProperty("--edge-title-x", `${x * -4}px`);
+    heroFrame.style.setProperty("--edge-title-y", `${y * -3}px`);
+    return;
+  }
   const rect = heroFrame.getBoundingClientRect();
   const x = ((event.clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
   const y = ((event.clientY - rect.top) / Math.max(1, rect.height) - 0.5) * 2;
@@ -217,6 +237,8 @@ function updateParallax(event) {
   heroFrame.style.setProperty("--cursor-y", `${yPercent}%`);
   heroFrame.style.setProperty("--stage-x", `${x * -22}px`);
   heroFrame.style.setProperty("--stage-y", `${y * -14}px`);
+  heroFrame.style.setProperty("--edge-title-x", `${x * -4}px`);
+  heroFrame.style.setProperty("--edge-title-y", `${y * -3}px`);
 
   parallaxItems.forEach((item) => {
     const depth = Number(item.dataset.depth || 0);
@@ -227,9 +249,13 @@ function updateParallax(event) {
 
 function resetParallax() {
   if (heroFrame) {
-    heroFrame.classList.remove("glitch-active");
+    heroFrame.classList.remove("glitch-active", "motion-active");
     heroFrame.style.setProperty("--stage-x", "0px");
     heroFrame.style.setProperty("--stage-y", "0px");
+    heroFrame.style.setProperty("--edge-window-x", "0px");
+    heroFrame.style.setProperty("--edge-window-y", "0px");
+    heroFrame.style.setProperty("--edge-title-x", "0px");
+    heroFrame.style.setProperty("--edge-title-y", "0px");
   }
   parallaxItems.forEach((item) => {
     item.style.setProperty("--px", "0px");
@@ -244,7 +270,7 @@ function resetParallax() {
 }
 
 function updateGlitchTitle(event) {
-  if (performanceMode || !heroFrame || !glitchTitle || !glitchChars.length) return;
+  if (!heroFrame || !glitchTitle || !glitchChars.length) return;
   const titleRect = glitchTitle.getBoundingClientRect();
   const cursorNearTitle =
     event.clientX > titleRect.left - 90 &&
@@ -293,8 +319,11 @@ function updateGlitchTitle(event) {
 }
 
 function queuePointerFrame(event) {
-  if (performanceMode || !canvasVisible) return;
+  if (!canvasVisible) return;
   pointer = { x: event.clientX, y: event.clientY, active: true };
+  if (heroFrame) {
+    heroFrame.classList.add("motion-active");
+  }
   if (pointerFrame) return;
   pointerFrame = requestAnimationFrame(() => {
     updateParallax(event);
@@ -328,7 +357,7 @@ const heroObserver = new IntersectionObserver(
 );
 
 const heroSection = document.getElementById("hero");
-if (heroSection && !performanceMode) {
+if (heroSection) {
   heroObserver.observe(heroSection);
 }
 
@@ -343,12 +372,10 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 });
 
-if (!performanceMode) {
-  window.addEventListener("resize", resizeCanvas);
-}
+window.addEventListener("resize", resizeCanvas);
 window.addEventListener("scroll", handleScroll, { passive: true });
 
-if (heroFrame && !performanceMode) {
+if (heroFrame) {
   heroFrame.addEventListener("pointermove", queuePointerFrame);
   heroFrame.addEventListener("pointerleave", () => {
     pointer.active = false;
