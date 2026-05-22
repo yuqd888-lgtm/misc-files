@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-label="Interactive web page mockup">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f3e9"/>
+      <stop offset=".46" stop-color="#e7efeb"/>
+      <stop offset="1" stop-color="#f6d08a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#6c604e" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="900" height="620" rx="34" fill="url(#bg)"/>
+  <rect x="82" y="114" width="736" height="360" rx="26" fill="#fffefa" filter="url(#shadow)"/>
+  <rect x="82" y="114" width="736" height="52" rx="26" fill="#ebe6dd"/>
+  <circle cx="118" cy="140" r="8" fill="#ff8a65"/>
+  <circle cx="144" cy="140" r="8" fill="#f8c35c"/>
+  <circle cx="170" cy="140" r="8" fill="#77c8b1"/>
+  <path d="M148 382 C262 240 382 456 492 290 C594 134 704 314 776 206" fill="none" stroke="#202323" stroke-width="3" opacity=".44"/>
+  <circle cx="252" cy="282" r="42" fill="#cde4da"/>
+  <circle cx="492" cy="290" r="62" fill="#f1c66d"/>
+  <circle cx="700" cy="238" r="48" fill="#e7b8a5"/>
+  <rect x="156" y="206" width="198" height="22" rx="11" fill="#202323"/>
+  <rect x="156" y="244" width="132" height="14" rx="7" fill="#9ba39e"/>
+  <rect x="556" y="360" width="160" height="58" rx="29" fill="#202323"/>
+  <text x="595" y="397" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#fffefa">Explore</text>
+</svg>

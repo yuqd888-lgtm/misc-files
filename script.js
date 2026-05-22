@@ -1,7 +1,7 @@
 const canvas = document.getElementById("heroCanvas");
 const isEdge = /\bEdg\//.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const useCanvas = !isEdge && !prefersReducedMotion;
+const useCanvas = false;
 const ctx = canvas && useCanvas ? canvas.getContext("2d", { alpha: true }) : null;
 const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
 const sections = Array.from(document.querySelectorAll("section[id]"));
