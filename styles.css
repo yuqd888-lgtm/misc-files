@@ -89,7 +89,7 @@ a {
 }
 
 html.is-edge #heroCanvas {
-  opacity: 0.42;
+  display: none;
 }
 
 html.is-edge .site-header,
@@ -100,6 +100,35 @@ html.is-edge .quote-card,
 html.is-edge .contact-inner,
 html.is-edge .message-template {
   backdrop-filter: none;
+}
+
+html.is-edge .noise-layer {
+  position: absolute;
+  height: 100vh;
+  opacity: 0.08;
+}
+
+html.is-edge *,
+html.is-edge *::before,
+html.is-edge *::after {
+  animation: none !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.is-edge .hero-frame,
+html.is-edge .hero-frame::before,
+html.is-edge .hero-frame::after,
+html.is-edge [data-depth],
+html.is-edge .hero-copy,
+html.is-edge .site-preview-window,
+html.is-edge .material-object,
+html.is-edge .work-fragment {
+  transform: none !important;
+}
+
+html.is-edge .hero-frame::before {
+  filter: none;
 }
 
 .brand,

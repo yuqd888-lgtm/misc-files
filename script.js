@@ -1,13 +1,14 @@
 const canvas = document.getElementById("heroCanvas");
-const ctx = canvas.getContext("2d", { alpha: true });
+const isEdge = /\bEdg\//.test(navigator.userAgent);
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const performanceMode = isEdge || prefersReducedMotion;
+const ctx = canvas && !performanceMode ? canvas.getContext("2d", { alpha: true }) : null;
 const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
 const sections = Array.from(document.querySelectorAll("section[id]"));
 const revealItems = Array.from(document.querySelectorAll(".reveal"));
 const heroFrame = document.querySelector("[data-parallax-root]");
 const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
-const isEdge = /\bEdg\//.test(navigator.userAgent);
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let glitchChars = [];
 let pointerFrame = null;
 let scrollFrame = null;
@@ -30,7 +31,7 @@ if ("scrollRestoration" in window.history) {
 }
 
 function prepareGlitchTitle() {
-  if (!glitchTitle) return;
+  if (!glitchTitle || performanceMode) return;
   const text = glitchTitle.textContent.trim();
   glitchTitle.dataset.text = text;
   glitchTitle.textContent = "";
@@ -60,7 +61,8 @@ function prepareGlitchTitle() {
 }
 
 function resizeCanvas() {
-  dpr = prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio || 1, isEdge ? 1.2 : 1.6);
+  if (!ctx || performanceMode) return;
+  dpr = Math.min(window.devicePixelRatio || 1, 1.6);
   width = window.innerWidth;
   height = window.innerHeight;
   canvas.width = Math.floor(width * dpr);
@@ -83,7 +85,7 @@ function resizeCanvas() {
 }
 
 function canAnimateCanvas() {
-  return !prefersReducedMotion && canvasVisible && !scrolling && width > 0 && height > 0;
+  return !performanceMode && Boolean(ctx) && canvasVisible && !scrolling && width > 0 && height > 0;
 }
 
 function scheduleCanvas() {
@@ -175,7 +177,7 @@ function updateActiveSection() {
 }
 
 function updateHeroScroll() {
-  if (!heroFrame) return;
+  if (!heroFrame || performanceMode) return;
   const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight * 0.72)));
   heroFrame.style.setProperty("--hero-opacity", String(1 - progress * 0.46));
   heroFrame.style.setProperty("--hero-shift", `${progress * 54}px`);
@@ -183,15 +185,17 @@ function updateHeroScroll() {
 }
 
 function handleScroll() {
-  scrolling = true;
-  if (scrollResumeTimer) {
-    window.clearTimeout(scrollResumeTimer);
-  }
+  if (!performanceMode) {
+    scrolling = true;
+    if (scrollResumeTimer) {
+      window.clearTimeout(scrollResumeTimer);
+    }
 
-  scrollResumeTimer = window.setTimeout(() => {
-    scrolling = false;
-    scheduleCanvas();
-  }, isEdge ? 180 : 120);
+    scrollResumeTimer = window.setTimeout(() => {
+      scrolling = false;
+      scheduleCanvas();
+    }, 120);
+  }
 
   if (scrollFrame) return;
   scrollFrame = requestAnimationFrame(() => {
@@ -202,7 +206,7 @@ function handleScroll() {
 }
 
 function updateParallax(event) {
-  if (!heroFrame) return;
+  if (!heroFrame || performanceMode) return;
   const rect = heroFrame.getBoundingClientRect();
   const x = ((event.clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
   const y = ((event.clientY - rect.top) / Math.max(1, rect.height) - 0.5) * 2;
@@ -240,7 +244,7 @@ function resetParallax() {
 }
 
 function updateGlitchTitle(event) {
-  if (!heroFrame || !glitchTitle || !glitchChars.length) return;
+  if (performanceMode || !heroFrame || !glitchTitle || !glitchChars.length) return;
   const titleRect = glitchTitle.getBoundingClientRect();
   const cursorNearTitle =
     event.clientX > titleRect.left - 90 &&
@@ -289,7 +293,7 @@ function updateGlitchTitle(event) {
 }
 
 function queuePointerFrame(event) {
-  if (!canvasVisible) return;
+  if (performanceMode || !canvasVisible) return;
   pointer = { x: event.clientX, y: event.clientY, active: true };
   if (pointerFrame) return;
   pointerFrame = requestAnimationFrame(() => {
@@ -324,7 +328,7 @@ const heroObserver = new IntersectionObserver(
 );
 
 const heroSection = document.getElementById("hero");
-if (heroSection) {
+if (heroSection && !performanceMode) {
   heroObserver.observe(heroSection);
 }
 
@@ -339,10 +343,12 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 });
 
-window.addEventListener("resize", resizeCanvas);
+if (!performanceMode) {
+  window.addEventListener("resize", resizeCanvas);
+}
 window.addEventListener("scroll", handleScroll, { passive: true });
 
-if (heroFrame) {
+if (heroFrame && !performanceMode) {
   heroFrame.addEventListener("pointermove", queuePointerFrame);
   heroFrame.addEventListener("pointerleave", () => {
     pointer.active = false;
