@@ -3286,3 +3286,40 @@ html.is-edge .hero-frame.motion-active .glitch-title,
     display: inline;
   }
 }
+
+/* Mobile hotfix: Notes cards should read horizontally, not as squeezed columns */
+@media (max-width: 680px) {
+  .notes-paper .note-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .notes-paper .note-row > span,
+  .notes-paper .note-thumb,
+  .notes-paper .note-copy,
+  .notes-paper .note-row em {
+    grid-column: 1 / -1;
+  }
+
+  .notes-paper .note-row > span {
+    width: max-content;
+  }
+
+  .notes-paper .note-row strong {
+    font-size: clamp(22px, 7vw, 28px);
+    line-height: 1.18;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .notes-paper .note-copy small {
+    font-size: 14px;
+    line-height: 1.72;
+  }
+
+  .notes-paper .note-row em {
+    justify-self: start;
+    width: fit-content;
+  }
+}
