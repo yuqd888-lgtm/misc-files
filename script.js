@@ -9,6 +9,8 @@ const revealItems = Array.from(document.querySelectorAll(".reveal"));
 const heroFrame = document.querySelector("[data-parallax-root]");
 const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
+const copyTemplateButton = document.querySelector("[data-copy-template]");
+const consultTemplate = document.getElementById("consult-template");
 let glitchChars = [];
 let pointerFrame = null;
 let scrollFrame = null;
@@ -33,7 +35,7 @@ if ("scrollRestoration" in window.history) {
 
 function prepareGlitchTitle() {
   if (!glitchTitle) return;
-  const text = glitchTitle.textContent.trim();
+  const text = glitchTitle.textContent.trim().replace("，让", "， 让");
   glitchTitle.dataset.text = text;
   glitchTitle.textContent = "";
 
@@ -371,6 +373,27 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     }
   });
 });
+
+if (copyTemplateButton && consultTemplate) {
+  const defaultCopyLabel = copyTemplateButton.textContent;
+  copyTemplateButton.addEventListener("click", async () => {
+    const text = consultTemplate.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      copyTemplateButton.textContent = "已复制，可以直接发我";
+      copyTemplateButton.classList.add("copied");
+      window.setTimeout(() => {
+        copyTemplateButton.textContent = defaultCopyLabel;
+        copyTemplateButton.classList.remove("copied");
+      }, 1800);
+    } catch (error) {
+      copyTemplateButton.textContent = "复制失败，请手动复制";
+      window.setTimeout(() => {
+        copyTemplateButton.textContent = defaultCopyLabel;
+      }, 1800);
+    }
+  });
+}
 
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("scroll", handleScroll, { passive: true });
