@@ -3270,6 +3270,12 @@ html.is-edge .hero-frame.motion-active .glitch-title,
   color: rgba(45, 49, 46, 0.76);
 }
 
+.hero-cn-note {
+  margin-top: 6px;
+  color: rgba(45, 49, 46, 0.58);
+  font-size: clamp(14px, 1.15vw, 16px);
+}
+
 @media (max-width: 680px) {
   html.is-edge .glitch-title,
   .hero h1 {
