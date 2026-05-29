@@ -1716,14 +1716,37 @@ body.modal-open {
 
 .proof-modal-details {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
-.proof-modal-details p {
+.proof-field {
+  border: 1px solid rgba(37, 42, 39, 0.1);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: rgba(250, 247, 238, 0.72);
+}
+
+.proof-field h4 {
+  margin: 0 0 6px;
+  color: #202323;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.proof-field small {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(70, 77, 72, 0.72);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.proof-modal-details p,
+.proof-field p {
   margin: 0;
   color: var(--muted);
-  font-size: 16px;
-  line-height: 1.75;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .proof-modal-details strong {

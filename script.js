@@ -223,8 +223,99 @@ function handleScroll() {
 
 function getProofCardText(card) {
   const title = card.querySelector("h3")?.textContent.trim() || "";
-  const rows = Array.from(card.querySelectorAll("p")).map((item) => item.textContent.trim());
-  return [title, ...rows].filter(Boolean).join("\n");
+  const rows = getProofFieldRows(title);
+  return [title, ...rows.map((item) => `${item.label}：${item.value}`)].filter(Boolean).join("\n");
+}
+
+const proofFieldMeanings = {
+  purpose: "说明这个作品解决什么场景，客户为什么需要它。",
+  tools: "说明制作链路和工具组合，判断是否能稳定复用。",
+  ai: "说明哪些环节由 AI 提效，而不是包装成全自动。",
+  human: "说明人工介入的审美、筛选、改稿和质量控制。",
+  deliverable: "说明最后能交付给客户什么文件、页面或资料。",
+  next: "说明这个作品还要用什么数据或场景继续验证。"
+};
+
+const proofFieldContent = {
+  "小红书AI副业封面系统": {
+    purpose: "验证 AI 能不能辅助做出更有点击感的小红书封面，并形成账号视觉模板。",
+    tools: "ChatGPT、AI 图像工具、Canva / Photoshop、人工排版检查。",
+    ai: "生成风格方向、标题备选、画面初稿和封面视觉参考。",
+    human: "判断标题点击感、统一字体层级、修正色彩和版式，筛掉不适合发布的方案。",
+    deliverable: "6-9 张封面样张、同主题多风格版本、标题优化前后对比。",
+    next: "放到小红书测试点击率、收藏率和评论反馈，继续筛选稳定风格。"
+  },
+  "AI副业图文卡片": {
+    purpose: "把一个 AI 副业观点做成可阅读、可收藏、适合发布的图文笔记。",
+    tools: "ChatGPT、Canva / Figma、AI 配图工具、人工信息整理。",
+    ai: "辅助拆观点、生成标题方向、整理内容页文案和配图建议。",
+    human: "控制信息密度、排版层级、阅读顺序和首图吸引力。",
+    deliverable: "6-8 页图文卡片，包含首图、内容页和总结页。",
+    next: "测试哪类观点更容易被收藏，再决定是否扩展成系列模板。"
+  },
+  "0基础AI工具清单": {
+    purpose: "帮助新手按真实任务选择工具，而不是看一堆无重点的工具合集。",
+    tools: "ChatGPT、Notion / 表格、主流 AI 写作、设计、PPT、视频和网页工具。",
+    ai: "辅助归类工具、生成使用场景说明和新手路径草稿。",
+    human: "筛掉不稳定、不适合新手或学习成本过高的工具。",
+    deliverable: "按写文案、做封面、做 PPT、剪视频、整理资料、做网页分类的工具清单。",
+    next: "用真实任务逐个测试工具效果，保留可交付链路里的工具。"
+  },
+  "AI副业项目验证页": {
+    purpose: "把一个 AI 副业方向拆成是否值得测试的判断页。",
+    tools: "ChatGPT、网页原型、案例拆解表、需求分析模板。",
+    ai: "辅助整理方向、用户需求、交付物、工具链和测试路径。",
+    human: "判断真实需求、风险点、交付难度和 3-7 天验证方式。",
+    deliverable: "一页项目拆解页，包含方向、用户、交付物、工具、风险和测试计划。",
+    next: "用一个具体方向做小样，观察是否有人愿意咨询或付费。"
+  },
+  "AI PPT / 资料整理": {
+    purpose: "验证 AI 能不能辅助做出可交付的 PPT 或资料包。",
+    tools: "ChatGPT、Kimi / 通义文档、PPT、Canva / Figma。",
+    ai: "提炼资料重点、生成 PPT 大纲、整理页面结构和表达顺序。",
+    human: "重排逻辑、压缩废话、调整版式，让内容更像可交付文件。",
+    deliverable: "一份 PPT 大纲、3-5 页 PPT 样稿、一页资料整理图和前后结构对比。",
+    next: "找真实资料做测试，验证整理速度和客户能否直接使用。"
+  },
+  "AI作品前后对比": {
+    purpose: "展示 AI 初稿到人工可交付版本之间的差距。",
+    tools: "ChatGPT、AI 图像工具、Canva / Photoshop、人工审美修正。",
+    ai: "生成初稿文案、初版封面、资料摘要和基础页面方向。",
+    human: "修正标题、版式、信息层级、视觉一致性和最终交付质量。",
+    deliverable: "AI 原始稿与人工优化稿对比，包括封面、文案、卡片和 PPT。",
+    next: "持续记录不同类型作品的改稿过程，形成可展示的交付标准。"
+  }
+};
+
+function getProofFieldRows(title) {
+  const content = proofFieldContent[title] || {};
+  return [
+    { label: "作品用途", meaning: proofFieldMeanings.purpose, value: content.purpose || "说明这个作品服务的具体场景和客户需求。" },
+    { label: "使用工具", meaning: proofFieldMeanings.tools, value: content.tools || "列出完成作品用到的 AI、设计、整理或网页工具。" },
+    { label: "AI负责", meaning: proofFieldMeanings.ai, value: content.ai || "说明 AI 参与生成、整理、扩展或提效的部分。" },
+    { label: "人工判断", meaning: proofFieldMeanings.human, value: content.human || "说明人工负责的审美、筛选、修改和质量判断。" },
+    { label: "交付物", meaning: proofFieldMeanings.deliverable, value: content.deliverable || "说明最终可以交给客户的具体文件或结果。" },
+    { label: "下一步验证", meaning: proofFieldMeanings.next, value: content.next || "说明接下来如何通过真实发布或咨询反馈继续验证。" }
+  ];
+}
+
+function renderProofFields(title) {
+  return getProofFieldRows(title).map((item) => {
+    const row = document.createElement("article");
+    row.className = "proof-field";
+
+    const heading = document.createElement("h4");
+    heading.textContent = item.label;
+
+    const meaning = document.createElement("small");
+    meaning.textContent = item.meaning;
+
+    const value = document.createElement("p");
+    value.textContent = item.value;
+
+    row.append(heading, meaning, value);
+    return row;
+  });
 }
 
 function openProofModal(card) {
@@ -261,8 +352,7 @@ function openProofModal(card) {
   if (proofModalLabel) proofModalLabel.textContent = label;
   if (proofModalStatus) proofModalStatus.textContent = status;
 
-  const details = Array.from(card.querySelectorAll("p")).map((item) => item.cloneNode(true));
-  proofModalDetails.replaceChildren(...details);
+  proofModalDetails.replaceChildren(...renderProofFields(title));
 
   proofModal.hidden = false;
   window.requestAnimationFrame(() => {
