@@ -1580,6 +1580,13 @@ body.modal-open {
   overflow: hidden;
 }
 
+body.modal-open .site-header,
+body.modal-open .scroll-index {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 .proof-modal[hidden] {
   display: none;
 }
@@ -1587,10 +1594,11 @@ body.modal-open {
 .proof-modal {
   position: fixed;
   inset: 0;
-  z-index: 120;
+  z-index: 9999;
   display: grid;
   place-items: center;
   padding: 28px;
+  isolation: isolate;
 }
 
 .proof-modal-backdrop {
@@ -1754,10 +1762,15 @@ body.modal-open {
 }
 
 .proof-modal-actions {
+  position: sticky;
+  bottom: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 28px;
+  padding-top: 14px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(to bottom, rgba(255, 253, 247, 0), #fffdf7 34%);
 }
 
 .proof-modal-actions .button {
