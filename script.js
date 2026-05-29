@@ -13,7 +13,7 @@ const copyTemplateButton = document.querySelector("[data-copy-template]");
 const consultTemplate = document.getElementById("consult-template");
 const proofCards = Array.from(document.querySelectorAll("[data-proof-card]"));
 const proofModal = document.querySelector("[data-proof-modal]");
-const proofModalImage = document.querySelector("[data-proof-modal-image]");
+const proofModalMedia = document.querySelector("[data-proof-modal-media]");
 const proofModalLabel = document.querySelector("[data-proof-modal-label]");
 const proofModalStatus = document.querySelector("[data-proof-modal-status]");
 const proofModalTitle = document.querySelector("[data-proof-modal-title]");
@@ -228,17 +228,26 @@ function getProofCardText(card) {
 }
 
 function openProofModal(card) {
-  if (!proofModal || !proofModalImage || !proofModalTitle || !proofModalDetails) return;
+  if (!proofModal || !proofModalMedia || !proofModalTitle || !proofModalDetails) return;
 
   activeProofCard = card;
   const cardImage = card.querySelector("img");
   const title = card.querySelector("h3")?.textContent.trim() || "作品详情";
   const label = card.querySelector("span")?.textContent.trim() || "AI Proof";
   const status = card.querySelector(".validation-status")?.textContent.trim() || "验证中";
-  const imageSrc = card.dataset.detailImage || cardImage?.getAttribute("src") || "";
+  const imageSources = (card.dataset.detailImages || card.dataset.detailImage || cardImage?.getAttribute("src") || "")
+    .split("|")
+    .map((item) => item.trim())
+    .filter(Boolean);
 
-  proofModalImage.src = imageSrc;
-  proofModalImage.alt = cardImage?.getAttribute("alt") || title;
+  proofModalMedia.replaceChildren(
+    ...imageSources.map((src, index) => {
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = index === 0 ? cardImage?.getAttribute("alt") || title : `${title} 补充样张 ${index + 1}`;
+      return image;
+    })
+  );
   proofModalTitle.textContent = title;
 
   if (proofModalLabel) proofModalLabel.textContent = label;

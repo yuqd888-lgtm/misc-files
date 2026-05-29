@@ -1633,16 +1633,21 @@ body.modal-open {
 }
 
 .proof-modal-media {
+  display: grid;
+  gap: 12px;
   min-height: 0;
+  overflow-y: auto;
+  padding: 12px;
   background: #f3eadc;
 }
 
 .proof-modal-media img {
   display: block;
   width: 100%;
-  height: 100%;
   max-height: min(760px, calc(100vh - 56px));
   object-fit: contain;
+  border-radius: 6px;
+  background: #fffdf7;
 }
 
 .proof-modal-content {
