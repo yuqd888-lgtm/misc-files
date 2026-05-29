@@ -11,7 +11,17 @@ const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
 const copyTemplateButton = document.querySelector("[data-copy-template]");
 const consultTemplate = document.getElementById("consult-template");
+const proofCards = Array.from(document.querySelectorAll("[data-proof-card]"));
+const proofModal = document.querySelector("[data-proof-modal]");
+const proofModalImage = document.querySelector("[data-proof-modal-image]");
+const proofModalLabel = document.querySelector("[data-proof-modal-label]");
+const proofModalStatus = document.querySelector("[data-proof-modal-status]");
+const proofModalTitle = document.querySelector("[data-proof-modal-title]");
+const proofModalDetails = document.querySelector("[data-proof-modal-details]");
+const proofModalCopy = document.querySelector("[data-proof-copy]");
+const proofModalContact = document.querySelector("[data-proof-contact]");
 let glitchChars = [];
+let activeProofCard = null;
 let pointerFrame = null;
 let scrollFrame = null;
 let scrollResumeTimer = null;
@@ -211,6 +221,59 @@ function handleScroll() {
   });
 }
 
+function getProofCardText(card) {
+  const title = card.querySelector("h3")?.textContent.trim() || "";
+  const rows = Array.from(card.querySelectorAll("p")).map((item) => item.textContent.trim());
+  return [title, ...rows].filter(Boolean).join("\n");
+}
+
+function openProofModal(card) {
+  if (!proofModal || !proofModalImage || !proofModalTitle || !proofModalDetails) return;
+
+  activeProofCard = card;
+  const cardImage = card.querySelector("img");
+  const title = card.querySelector("h3")?.textContent.trim() || "作品详情";
+  const label = card.querySelector("span")?.textContent.trim() || "AI Proof";
+  const status = card.querySelector(".validation-status")?.textContent.trim() || "验证中";
+  const imageSrc = card.dataset.detailImage || cardImage?.getAttribute("src") || "";
+
+  proofModalImage.src = imageSrc;
+  proofModalImage.alt = cardImage?.getAttribute("alt") || title;
+  proofModalTitle.textContent = title;
+
+  if (proofModalLabel) proofModalLabel.textContent = label;
+  if (proofModalStatus) proofModalStatus.textContent = status;
+
+  const details = Array.from(card.querySelectorAll("p")).map((item) => item.cloneNode(true));
+  proofModalDetails.replaceChildren(...details);
+
+  proofModal.hidden = false;
+  document.body.classList.add("modal-open");
+  proofModal.querySelector(".proof-modal-close")?.focus();
+}
+
+function closeProofModal() {
+  if (!proofModal || proofModal.hidden) return;
+  proofModal.hidden = true;
+  document.body.classList.remove("modal-open");
+  activeProofCard?.focus();
+  activeProofCard = null;
+}
+
+async function copyProofDetails() {
+  if (!activeProofCard || !proofModalCopy) return;
+  const defaultLabel = "复制作品说明";
+  try {
+    await navigator.clipboard.writeText(getProofCardText(activeProofCard));
+    proofModalCopy.textContent = "已复制";
+  } catch (error) {
+    proofModalCopy.textContent = "复制失败";
+  }
+  window.setTimeout(() => {
+    proofModalCopy.textContent = defaultLabel;
+  }, 1600);
+}
+
 function updateParallax(event) {
   if (!heroFrame) return;
   if (isEdge) {
@@ -372,6 +435,29 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
+});
+
+proofCards.forEach((card) => {
+  card.addEventListener("click", () => openProofModal(card));
+  card.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openProofModal(card);
+    }
+  });
+});
+
+document.querySelectorAll("[data-proof-close]").forEach((control) => {
+  control.addEventListener("click", closeProofModal);
+});
+
+proofModalCopy?.addEventListener("click", copyProofDetails);
+proofModalContact?.addEventListener("click", closeProofModal);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeProofModal();
+  }
 });
 
 if (copyTemplateButton && consultTemplate) {

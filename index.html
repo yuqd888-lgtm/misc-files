@@ -249,8 +249,8 @@
         </div>
         <p class="section-intro reveal">不是成功案例，而是我从 0 开始测试“AI 能做出什么可展示、可交付作品”的记录。</p>
         <div class="validation-grid">
-          <article class="validation-card reveal">
-            <img src="assets/rednote-system.svg" alt="小红书封面验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/ai-proof-kashmir.png" role="button" tabindex="0" aria-label="查看小红书封面作品详情">
+            <img src="assets/ai-proof-kashmir.png" alt="小红书封面验证样张" loading="lazy" decoding="async">
             <div>
               <span>Rednote Cover</span>
               <em class="validation-status">验证中</em>
@@ -261,8 +261,8 @@
               <p><strong>下一步验证：</strong>做 3 组标题和版式，对比收藏率。</p>
             </div>
           </article>
-          <article class="validation-card reveal">
-            <img src="assets/interaction-page.svg" alt="图文卡片验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/ai-proof-side-hustle.png" role="button" tabindex="0" aria-label="查看图文卡片作品详情">
+            <img src="assets/ai-proof-side-hustle.png" alt="图文卡片验证样张" loading="lazy" decoding="async">
             <div>
               <span>Visual Cards</span>
               <em class="validation-status">可展示</em>
@@ -273,8 +273,8 @@
               <p><strong>下一步验证：</strong>做成 6 页笔记，测试完读率。</p>
             </div>
           </article>
-          <article class="validation-card reveal">
-            <img src="assets/ai-landing.svg" alt="AI工具清单验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/ai-landing.svg" role="button" tabindex="0" aria-label="查看AI工具清单作品详情">
+            <img src="assets/ai-landing.svg" alt="AI工具清单验证样张" loading="lazy" decoding="async">
             <div>
               <span>Tool List</span>
               <em class="validation-status">验证中</em>
@@ -285,8 +285,8 @@
               <p><strong>下一步验证：</strong>补充价格、难度、产出样例。</p>
             </div>
           </article>
-          <article class="validation-card reveal">
-            <img src="assets/brand-site.svg" alt="项目拆解页验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/brand-site.svg" role="button" tabindex="0" aria-label="查看项目拆解页作品详情">
+            <img src="assets/brand-site.svg" alt="项目拆解页验证样张" loading="lazy" decoding="async">
             <div>
               <span>Case Page</span>
               <em class="validation-status">可交付</em>
@@ -297,8 +297,8 @@
               <p><strong>下一步验证：</strong>加入真实素材和前后对比。</p>
             </div>
           </article>
-          <article class="validation-card reveal">
-            <img src="assets/ai-landing.svg" alt="PPT资料整理验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/ai-landing.svg" role="button" tabindex="0" aria-label="查看PPT资料整理作品详情">
+            <img src="assets/ai-landing.svg" alt="PPT资料整理验证样张" loading="lazy" decoding="async">
             <div>
               <span>PPT Kit</span>
               <em class="validation-status">待复盘</em>
@@ -309,8 +309,8 @@
               <p><strong>下一步验证：</strong>做一套可交付 PPT 模板样张。</p>
             </div>
           </article>
-          <article class="validation-card reveal">
-            <img src="assets/interaction-page.svg" alt="前后对比验证样张">
+          <article class="validation-card reveal" data-proof-card data-detail-image="assets/interaction-page.svg" role="button" tabindex="0" aria-label="查看前后对比作品详情">
+            <img src="assets/interaction-page.svg" alt="前后对比验证样张" loading="lazy" decoding="async">
             <div>
               <span>Before / After</span>
               <em class="validation-status">待复盘</em>
@@ -323,6 +323,28 @@
           </article>
         </div>
       </section>
+
+      <div class="proof-modal" data-proof-modal hidden>
+        <div class="proof-modal-backdrop" data-proof-close></div>
+        <section class="proof-modal-panel" role="dialog" aria-modal="true" aria-labelledby="proof-modal-title">
+          <button class="proof-modal-close" type="button" data-proof-close aria-label="关闭作品详情">×</button>
+          <figure class="proof-modal-media">
+            <img data-proof-modal-image alt="">
+          </figure>
+          <div class="proof-modal-content">
+            <div class="proof-modal-meta">
+              <span data-proof-modal-label>Rednote Cover</span>
+              <em data-proof-modal-status>验证中</em>
+            </div>
+            <h3 id="proof-modal-title" data-proof-modal-title>小红书封面</h3>
+            <div class="proof-modal-details" data-proof-modal-details></div>
+            <div class="proof-modal-actions">
+              <a class="button primary" href="#contact" data-proof-contact>咨询类似作品</a>
+              <button class="button ghost" type="button" data-proof-copy>复制作品说明</button>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <section class="content-section decomposed-section validation-log" id="validation-log">
         <div class="section-heading reveal">
