@@ -1240,7 +1240,7 @@ html.is-edge .glitch-char.disturbed {
 
 .stack-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -1282,6 +1282,10 @@ html.is-edge .glitch-char.disturbed {
   color: rgba(246, 241, 229, 0.72);
   font-size: 13px;
   line-height: 1.45;
+}
+
+.service-card li strong {
+  color: #2f8f7c;
 }
 
 .service-card li::before {
