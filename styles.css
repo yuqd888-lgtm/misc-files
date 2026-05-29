@@ -1569,6 +1569,78 @@ html.is-edge .glitch-char.disturbed {
   color: #202323;
 }
 
+.validation-log {
+  padding-top: 84px;
+}
+
+.log-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.log-card {
+  border: 1px solid rgba(37, 42, 39, 0.12);
+  border-radius: 8px;
+  padding: 24px;
+  background: rgba(255, 253, 247, 0.92);
+  box-shadow: 0 18px 48px rgba(90, 76, 54, 0.08);
+}
+
+.log-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.log-card-head span,
+.log-card-head em {
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.log-card-head span {
+  color: #2f8f7c;
+  background: #edf6f1;
+}
+
+.log-card-head em {
+  color: #6d5a2d;
+  background: rgba(217, 154, 61, 0.12);
+}
+
+.log-card h3 {
+  margin-bottom: 12px;
+  font-size: clamp(24px, 2.4vw, 34px);
+}
+
+.log-card p,
+.log-card li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.log-card ul {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.log-card strong {
+  color: #202323;
+}
+
+.featured-log {
+  background: linear-gradient(145deg, rgba(255, 253, 247, 0.96), rgba(237, 246, 241, 0.88));
+  border-color: rgba(47, 143, 124, 0.26);
+}
+
 .notes-list {
   border-top: 1px solid var(--line);
 }
@@ -2248,6 +2320,7 @@ html.is-edge .glitch-char.disturbed {
   .work-grid,
   .stack-grid,
   .validation-grid,
+  .log-grid,
   .story-layout,
   .process-line {
     grid-template-columns: repeat(2, 1fr);
@@ -2464,6 +2537,7 @@ html.is-edge .glitch-char.disturbed {
   .work-grid,
   .stack-grid,
   .validation-grid,
+  .log-grid,
   .story-layout,
   .process-line {
     grid-template-columns: 1fr;
