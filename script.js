@@ -357,6 +357,7 @@ function openProofModal(card) {
   proofModal.hidden = false;
   window.requestAnimationFrame(() => {
     proofModalMedia.scrollTop = 0;
+    proofModal.querySelector(".proof-modal-content")?.scrollTo({ top: 0, left: 0 });
   });
   document.body.classList.add("modal-open");
   proofModal.querySelector(".proof-modal-close")?.focus();

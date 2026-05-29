@@ -1684,10 +1684,12 @@ body.modal-open .scroll-index {
 .proof-modal-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 0;
   padding: 44px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .proof-modal-meta {
