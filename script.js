@@ -240,14 +240,22 @@ function openProofModal(card) {
     .map((item) => item.trim())
     .filter(Boolean);
 
-  proofModalMedia.replaceChildren(
-    ...imageSources.map((src, index) => {
-      const image = document.createElement("img");
-      image.src = src;
-      image.alt = index === 0 ? cardImage?.getAttribute("alt") || title : `${title} 补充样张 ${index + 1}`;
-      return image;
-    })
-  );
+  const mediaItems = imageSources.map((src, index) => {
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = index === 0 ? cardImage?.getAttribute("alt") || title : `${title} image ${index + 1}`;
+    return image;
+  });
+
+  if (imageSources.length > 1) {
+    const hint = document.createElement("figcaption");
+    hint.className = "proof-modal-hint";
+    hint.textContent = `${imageSources.length} 张作品图，可上下滑动查看`;
+    mediaItems.unshift(hint);
+  }
+
+  proofModalMedia.replaceChildren(...mediaItems);
+  proofModalMedia.scrollTop = 0;
   proofModalTitle.textContent = title;
 
   if (proofModalLabel) proofModalLabel.textContent = label;
@@ -257,6 +265,9 @@ function openProofModal(card) {
   proofModalDetails.replaceChildren(...details);
 
   proofModal.hidden = false;
+  window.requestAnimationFrame(() => {
+    proofModalMedia.scrollTop = 0;
+  });
   document.body.classList.add("modal-open");
   proofModal.querySelector(".proof-modal-close")?.focus();
 }
