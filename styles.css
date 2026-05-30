@@ -1671,6 +1671,22 @@ body.modal-open .scroll-index {
   -webkit-overflow-scrolling: touch;
 }
 
+.proof-modal-image-item {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.proof-modal-image-link {
+  display: block;
+  border-radius: 6px;
+  outline-offset: 3px;
+}
+
+.proof-modal-image-link:focus-visible {
+  outline: 3px solid rgba(47, 143, 124, 0.34);
+}
+
 .proof-modal-media img {
   display: block;
   width: 100%;
@@ -1679,6 +1695,26 @@ body.modal-open .scroll-index {
   object-fit: contain;
   border-radius: 6px;
   background: #fffdf7;
+}
+
+.proof-modal-download {
+  justify-self: end;
+  border: 1px solid rgba(37, 42, 39, 0.12);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: #202323;
+  background: rgba(255, 253, 247, 0.9);
+  font-size: 12px;
+  font-weight: 700;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.proof-modal-download:hover,
+.proof-modal-download:focus-visible {
+  border-color: rgba(47, 143, 124, 0.34);
+  background: #fffdf7;
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .proof-modal-hint {

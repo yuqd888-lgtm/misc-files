@@ -332,10 +332,30 @@ function openProofModal(card) {
     .filter(Boolean);
 
   const mediaItems = imageSources.map((src, index) => {
+    const item = document.createElement("figure");
+    item.className = "proof-modal-image-item";
+
+    const preview = document.createElement("a");
+    preview.className = "proof-modal-image-link";
+    preview.href = src;
+    preview.target = "_blank";
+    preview.rel = "noopener";
+    preview.title = "打开大图";
+    preview.setAttribute("aria-label", `打开${title}第 ${index + 1} 张大图`);
+
     const image = document.createElement("img");
     image.src = src;
     image.alt = index === 0 ? cardImage?.getAttribute("alt") || title : `${title} image ${index + 1}`;
-    return image;
+    preview.append(image);
+
+    const download = document.createElement("a");
+    download.className = "proof-modal-download";
+    download.href = src;
+    download.download = src.split("/").pop() || `${title}-${index + 1}.jpg`;
+    download.textContent = `下载图片 ${index + 1}`;
+
+    item.append(preview, download);
+    return item;
   });
 
   if (imageSources.length > 1) {
