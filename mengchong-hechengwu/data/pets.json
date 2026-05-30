@@ -1,0 +1,122 @@
+[
+  {
+    "id": "P001",
+    "name": "小橘猫",
+    "star": 1,
+    "unlockShards": 5,
+    "description": "爱睡觉，看到鱼干会瞬间清醒",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 100
+  },
+  {
+    "id": "P002",
+    "name": "小奶猫",
+    "star": 1,
+    "unlockShards": 5,
+    "description": "好奇心很强，喜欢钻纸箱",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 100
+  },
+  {
+    "id": "P003",
+    "name": "英短猫",
+    "star": 2,
+    "unlockShards": 10,
+    "description": "安静优雅，偶尔有点小傲娇",
+    "rewardType": "prop",
+    "rewardId": "bomb",
+    "rewardCount": 1
+  },
+  {
+    "id": "P004",
+    "name": "布偶猫",
+    "star": 2,
+    "unlockShards": 10,
+    "description": "温柔黏人，是小屋里的治愈担当",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 200
+  },
+  {
+    "id": "P005",
+    "name": "暹罗猫",
+    "star": 3,
+    "unlockShards": 15,
+    "description": "很爱聊天，总能发现隐藏奖励",
+    "rewardType": "prop",
+    "rewardId": "shuffle",
+    "rewardCount": 1
+  },
+  {
+    "id": "P006",
+    "name": "柴犬",
+    "star": 1,
+    "unlockShards": 5,
+    "description": "表情丰富，最喜欢散步和骨头",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 100
+  },
+  {
+    "id": "P007",
+    "name": "柯基",
+    "star": 2,
+    "unlockShards": 10,
+    "description": "小短腿跑得飞快，负责活跃气氛",
+    "rewardType": "prop",
+    "rewardId": "bomb",
+    "rewardCount": 1
+  },
+  {
+    "id": "P008",
+    "name": "金毛",
+    "star": 2,
+    "unlockShards": 10,
+    "description": "温暖可靠，会守护每一次通关",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 200
+  },
+  {
+    "id": "P009",
+    "name": "萨摩耶",
+    "star": 3,
+    "unlockShards": 15,
+    "description": "笑容满分，通关失败也不气馁",
+    "rewardType": "prop",
+    "rewardId": "magic_paw",
+    "rewardCount": 1
+  },
+  {
+    "id": "P010",
+    "name": "边牧",
+    "star": 3,
+    "unlockShards": 15,
+    "description": "聪明机灵，总能找到最佳连线路径",
+    "rewardType": "prop",
+    "rewardId": "shuffle",
+    "rewardCount": 1
+  },
+  {
+    "id": "P011",
+    "name": "拉布拉多",
+    "star": 4,
+    "unlockShards": 20,
+    "description": "温柔稳定，是玩家的最佳伙伴",
+    "rewardType": "coins",
+    "rewardId": "coins",
+    "rewardCount": 500
+  },
+  {
+    "id": "P012",
+    "name": "哈士奇",
+    "star": 4,
+    "unlockShards": 20,
+    "description": "精力旺盛，偶尔会制造惊喜",
+    "rewardType": "prop",
+    "rewardId": "magic_paw",
+    "rewardCount": 1
+  }
+]

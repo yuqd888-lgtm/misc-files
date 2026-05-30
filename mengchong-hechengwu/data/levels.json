@@ -1,0 +1,665 @@
+[
+  {
+    "levelId": 1,
+    "boardSize": 6,
+    "moveLimit": 20,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 8
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 50,
+    "rewardPetShards": [
+      {
+        "petId": "P001",
+        "count": 1
+      }
+    ],
+    "difficulty": 1
+  },
+  {
+    "levelId": 2,
+    "boardSize": 6,
+    "moveLimit": 19,
+    "targets": [
+      {
+        "itemId": "dog_food",
+        "count": 10
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 55,
+    "rewardPetShards": [
+      {
+        "petId": "P006",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 3,
+    "boardSize": 6,
+    "moveLimit": 19,
+    "targets": [
+      {
+        "itemId": "dried_fish",
+        "count": 10
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 60,
+    "rewardPetShards": [
+      {
+        "petId": "P002",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 4,
+    "boardSize": 6,
+    "moveLimit": 18,
+    "targets": [
+      {
+        "itemId": "bone",
+        "count": 12
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 65,
+    "rewardPetShards": [
+      {
+        "petId": "P006",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 5,
+    "boardSize": 6,
+    "moveLimit": 18,
+    "targets": [],
+    "scoreTarget": 1200,
+    "rewardCoins": 90,
+    "rewardPetShards": [
+      {
+        "petId": "P001",
+        "count": 2
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 6,
+    "boardSize": 6,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 10
+      },
+      {
+        "itemId": "dried_fish",
+        "count": 8
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 80,
+    "rewardPetShards": [
+      {
+        "petId": "P002",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 7,
+    "boardSize": 6,
+    "moveLimit": 21,
+    "targets": [
+      {
+        "itemId": "dog_food",
+        "count": 10
+      },
+      {
+        "itemId": "bone",
+        "count": 8
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 85,
+    "rewardPetShards": [
+      {
+        "petId": "P007",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 8,
+    "boardSize": 6,
+    "moveLimit": 21,
+    "targets": [
+      {
+        "itemId": "toy_ball",
+        "count": 12
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 90,
+    "rewardPetShards": [
+      {
+        "petId": "P003",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 9,
+    "boardSize": 6,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "bell",
+        "count": 6
+      }
+    ],
+    "scoreTarget": 1600,
+    "rewardCoins": 95,
+    "rewardPetShards": [
+      {
+        "petId": "P004",
+        "count": 1
+      }
+    ],
+    "difficulty": 2
+  },
+  {
+    "levelId": 10,
+    "boardSize": 6,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 12
+      },
+      {
+        "itemId": "dog_food",
+        "count": 12
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 130,
+    "rewardPetShards": [
+      {
+        "petId": "P007",
+        "count": 2
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 11,
+    "boardSize": 7,
+    "moveLimit": 24,
+    "targets": [],
+    "scoreTarget": 2200,
+    "rewardCoins": 110,
+    "rewardPetShards": [
+      {
+        "petId": "P003",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 12,
+    "boardSize": 7,
+    "moveLimit": 23,
+    "targets": [
+      {
+        "itemId": "dried_fish",
+        "count": 14
+      },
+      {
+        "itemId": "toy_ball",
+        "count": 10
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 115,
+    "rewardPetShards": [
+      {
+        "petId": "P004",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 13,
+    "boardSize": 7,
+    "moveLimit": 23,
+    "targets": [
+      {
+        "itemId": "bone",
+        "count": 14
+      },
+      {
+        "itemId": "bell",
+        "count": 7
+      }
+    ],
+    "scoreTarget": 0,
+    "rewardCoins": 120,
+    "rewardPetShards": [
+      {
+        "petId": "P008",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 14,
+    "boardSize": 7,
+    "moveLimit": 24,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 16
+      }
+    ],
+    "scoreTarget": 1800,
+    "rewardCoins": 130,
+    "rewardPetShards": [
+      {
+        "petId": "P005",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 15,
+    "boardSize": 7,
+    "moveLimit": 24,
+    "targets": [],
+    "scoreTarget": 3000,
+    "rewardCoins": 180,
+    "rewardPetShards": [
+      {
+        "petId": "P008",
+        "count": 2
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 16,
+    "boardSize": 7,
+    "moveLimit": 23,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 16
+      },
+      {
+        "itemId": "dried_fish",
+        "count": 14
+      }
+    ],
+    "scoreTarget": 2200,
+    "rewardCoins": 150,
+    "rewardPetShards": [
+      {
+        "petId": "P005",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 17,
+    "boardSize": 7,
+    "moveLimit": 23,
+    "targets": [
+      {
+        "itemId": "dog_food",
+        "count": 16
+      },
+      {
+        "itemId": "bone",
+        "count": 14
+      }
+    ],
+    "scoreTarget": 2200,
+    "rewardCoins": 150,
+    "rewardPetShards": [
+      {
+        "petId": "P009",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 18,
+    "boardSize": 7,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "toy_ball",
+        "count": 18
+      },
+      {
+        "itemId": "bell",
+        "count": 9
+      }
+    ],
+    "scoreTarget": 2400,
+    "rewardCoins": 160,
+    "rewardPetShards": [
+      {
+        "petId": "P010",
+        "count": 1
+      }
+    ],
+    "difficulty": 3
+  },
+  {
+    "levelId": 19,
+    "boardSize": 7,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "dried_fish",
+        "count": 18
+      },
+      {
+        "itemId": "bell",
+        "count": 10
+      }
+    ],
+    "scoreTarget": 2800,
+    "rewardCoins": 170,
+    "rewardPetShards": [
+      {
+        "petId": "P009",
+        "count": 1
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 20,
+    "boardSize": 7,
+    "moveLimit": 23,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 16
+      },
+      {
+        "itemId": "dog_food",
+        "count": 16
+      },
+      {
+        "itemId": "dried_fish",
+        "count": 10
+      }
+    ],
+    "scoreTarget": 3000,
+    "rewardCoins": 220,
+    "rewardPetShards": [
+      {
+        "petId": "P010",
+        "count": 2
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 21,
+    "boardSize": 7,
+    "moveLimit": 22,
+    "targets": [
+      {
+        "itemId": "bone",
+        "count": 20
+      },
+      {
+        "itemId": "toy_ball",
+        "count": 14
+      }
+    ],
+    "scoreTarget": 2600,
+    "rewardCoins": 190,
+    "rewardPetShards": [
+      {
+        "petId": "P011",
+        "count": 1
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 22,
+    "boardSize": 7,
+    "moveLimit": 22,
+    "targets": [],
+    "scoreTarget": 3600,
+    "rewardCoins": 200,
+    "rewardPetShards": [
+      {
+        "petId": "P012",
+        "count": 1
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 23,
+    "boardSize": 7,
+    "moveLimit": 21,
+    "targets": [
+      {
+        "itemId": "bell",
+        "count": 12
+      },
+      {
+        "itemId": "toy_ball",
+        "count": 16
+      }
+    ],
+    "scoreTarget": 3200,
+    "rewardCoins": 210,
+    "rewardPetShards": [
+      {
+        "petId": "P011",
+        "count": 1
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 24,
+    "boardSize": 7,
+    "moveLimit": 21,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 18
+      },
+      {
+        "itemId": "dried_fish",
+        "count": 16
+      },
+      {
+        "itemId": "bell",
+        "count": 8
+      }
+    ],
+    "scoreTarget": 3400,
+    "rewardCoins": 220,
+    "rewardPetShards": [
+      {
+        "petId": "P012",
+        "count": 1
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 25,
+    "boardSize": 7,
+    "moveLimit": 21,
+    "targets": [
+      {
+        "itemId": "bone",
+        "count": 22
+      },
+      {
+        "itemId": "bell",
+        "count": 12
+      }
+    ],
+    "scoreTarget": 3800,
+    "rewardCoins": 280,
+    "rewardPetShards": [
+      {
+        "petId": "P010",
+        "count": 2
+      }
+    ],
+    "difficulty": 4
+  },
+  {
+    "levelId": 26,
+    "boardSize": 8,
+    "moveLimit": 20,
+    "targets": [
+      {
+        "itemId": "dog_food",
+        "count": 22
+      },
+      {
+        "itemId": "bone",
+        "count": 18
+      }
+    ],
+    "scoreTarget": 3600,
+    "rewardCoins": 240,
+    "rewardPetShards": [
+      {
+        "petId": "P008",
+        "count": 1
+      }
+    ],
+    "difficulty": 5
+  },
+  {
+    "levelId": 27,
+    "boardSize": 8,
+    "moveLimit": 20,
+    "targets": [
+      {
+        "itemId": "toy_ball",
+        "count": 22
+      },
+      {
+        "itemId": "bell",
+        "count": 14
+      }
+    ],
+    "scoreTarget": 3800,
+    "rewardCoins": 250,
+    "rewardPetShards": [
+      {
+        "petId": "P005",
+        "count": 1
+      }
+    ],
+    "difficulty": 5
+  },
+  {
+    "levelId": 28,
+    "boardSize": 8,
+    "moveLimit": 20,
+    "targets": [],
+    "scoreTarget": 4600,
+    "rewardCoins": 260,
+    "rewardPetShards": [
+      {
+        "petId": "P009",
+        "count": 1
+      }
+    ],
+    "difficulty": 5
+  },
+  {
+    "levelId": 29,
+    "boardSize": 8,
+    "moveLimit": 20,
+    "targets": [
+      {
+        "itemId": "cat_food",
+        "count": 20
+      },
+      {
+        "itemId": "dog_food",
+        "count": 20
+      },
+      {
+        "itemId": "dried_fish",
+        "count": 14
+      }
+    ],
+    "scoreTarget": 4200,
+    "rewardCoins": 280,
+    "rewardPetShards": [
+      {
+        "petId": "P011",
+        "count": 1
+      }
+    ],
+    "difficulty": 5
+  },
+  {
+    "levelId": 30,
+    "boardSize": 8,
+    "moveLimit": 20,
+    "targets": [
+      {
+        "itemId": "bell",
+        "count": 16
+      },
+      {
+        "itemId": "bone",
+        "count": 18
+      },
+      {
+        "itemId": "toy_ball",
+        "count": 18
+      }
+    ],
+    "scoreTarget": 4800,
+    "rewardCoins": 350,
+    "rewardPetShards": [
+      {
+        "petId": "P012",
+        "count": 2
+      }
+    ],
+    "difficulty": 5
+  }
+]

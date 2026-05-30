@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>萌宠合成屋</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="home-view cover-image-mode" id="homeView">
+        <img class="home-cover-image" src="./assets/home-cover-generated.png" alt="萌宠合成屋首页封面" />
+        <div class="resource-bar">
+          <div class="resource-pill">
+            <span class="resource-icon coin-icon">¥</span>
+            <b id="homeCoinsTop">0</b>
+          </div>
+          <div class="resource-pill">
+            <span class="resource-icon paw-icon">爪</span>
+            <b id="homePetCount">0/12</b>
+          </div>
+          <button class="icon-button settings-button" id="settingsButton" title="设置" aria-label="设置">
+            <span></span>
+          </button>
+        </div>
+
+        <div class="brand-block">
+          <p class="eyebrow">Cute Link Puzzle</p>
+          <h1>萌宠合成屋</h1>
+          <p class="tagline"><span>我家萌宠有表情包啦！</span></p>
+        </div>
+
+        <div class="home-stage">
+          <div class="sticker-headline">今日萌宠表情</div>
+          <div class="window-glow"></div>
+          <div class="shelf">
+            <span class="shelf-item fish-item"></span>
+            <span class="shelf-item ball-item"></span>
+            <span class="shelf-item bone-item"></span>
+          </div>
+          <img class="fixed-pet-art" src="./assets/fixed-pets.png" alt="固定的小橘猫和柴犬" />
+          <div class="speech-bubble" id="petBubble">今天也要收集鱼干喵！</div>
+          <div class="pet-figure cat-figure" aria-label="小橘猫">
+            <span class="ear ear-left"></span>
+            <span class="ear ear-right"></span>
+            <span class="face">
+              <i class="eye eye-left"></i>
+              <i class="eye eye-right"></i>
+              <i class="nose"></i>
+              <i class="cheek cheek-left"></i>
+              <i class="cheek cheek-right"></i>
+              <i class="stripe stripe-one"></i>
+              <i class="stripe stripe-two"></i>
+              <i class="stripe stripe-three"></i>
+            </span>
+            <span class="pet-body">
+              <i class="front-paw paw-left"></i>
+              <i class="front-paw paw-right"></i>
+            </span>
+            <span class="tail"></span>
+            <strong>小橘猫</strong>
+          </div>
+          <div class="pet-figure dog-figure" aria-label="柴犬">
+            <span class="ear ear-left"></span>
+            <span class="ear ear-right"></span>
+            <span class="face">
+              <i class="eye eye-left"></i>
+              <i class="eye eye-right"></i>
+              <i class="nose"></i>
+              <i class="cheek cheek-left"></i>
+              <i class="cheek cheek-right"></i>
+              <i class="tongue"></i>
+            </span>
+            <span class="pet-body">
+              <i class="front-paw paw-left"></i>
+              <i class="front-paw paw-right"></i>
+            </span>
+            <span class="tail"></span>
+            <strong>柴犬</strong>
+          </div>
+          <div class="pet-bowl"></div>
+          <div class="wall-paw paw-one"></div>
+          <div class="wall-paw paw-two"></div>
+          <div class="locked-pet">
+            <span>?</span>
+            <small>待解锁</small>
+          </div>
+          <div class="meme-stickers" aria-label="萌宠表情贴纸">
+            <span class="meme-sticker sticker-one"><b>1.</b> 在干嘛呢？</span>
+            <span class="meme-sticker sticker-two"><b>2.</b> 饿了</span>
+            <span class="meme-sticker sticker-three"><b>3.</b> 求摸摸</span>
+            <span class="meme-sticker sticker-four"><b>4.</b> 贴贴</span>
+          </div>
+        </div>
+
+        <div class="featured-pet-badge" id="homeFeaturedPet">首页萌宠：待入住</div>
+
+        <button class="player-level-card" id="playerLevelCard" type="button">
+          <div>
+            <span>玩家等级</span>
+            <strong>Lv.<b id="playerLevelText">1</b></strong>
+          </div>
+          <div class="level-exp-row">
+            <span id="playerExpText">0/100</span>
+            <i><em id="playerExpFill"></em></i>
+          </div>
+        </button>
+
+        <div class="progress-panel">
+          <div>
+            <span>继续挑战</span>
+            <strong>第 <b id="homeLevel">1</b> 关</strong>
+          </div>
+          <div>
+            <span>图鉴进度</span>
+            <strong id="petProgressText">0/12</strong>
+          </div>
+          <div class="next-pet-row">
+            <span id="nextPetName">下一只宠物</span>
+            <div class="mini-progress"><i id="nextPetProgress"></i></div>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="primary-button start-game-button" id="startButton">
+            <span>继续闯关</span>
+            <b>第 <i id="startLevelText">1</i> 关</b>
+          </button>
+        </div>
+
+        <nav class="home-nav" aria-label="首页入口">
+          <button class="nav-button" id="petBookButton">
+            <span class="nav-icon album-icon" aria-hidden="true"></span>
+            图鉴
+          </button>
+          <button class="nav-button" id="signInButton">
+            <span class="nav-icon gift-icon" aria-hidden="true"><i id="rewardDot"></i></span>
+            <b id="signInStatus">奖励</b>
+          </button>
+          <button class="nav-button" id="roomButton">
+            <span class="nav-icon room-icon" aria-hidden="true"></span>
+            小屋
+          </button>
+          <button class="nav-button" id="taskButton">
+            <span class="nav-icon task-icon" aria-hidden="true"></span>
+            任务
+          </button>
+        </nav>
+      </section>
+
+      <section class="game-view hidden" id="gameView">
+        <div class="game-header">
+          <button class="icon-button" id="backButton" title="返回首页">‹</button>
+          <div>
+            <p class="eyebrow">Level <span id="levelId">1</span></p>
+            <h2 id="levelTitle">第 1 关</h2>
+          </div>
+          <div class="coin-pill">金币 <b id="coins">0</b></div>
+        </div>
+
+        <div class="goal-panel">
+          <div class="stat-card moves-stat" id="movesStat">
+            <span>剩余步数</span>
+            <strong id="movesLeft">0</strong>
+            <em id="moveWarning"></em>
+          </div>
+          <div class="stat-card score-stat" id="scoreStat">
+            <span>得分</span>
+            <strong><b id="score">0</b><i id="scoreTargetText"></i></strong>
+            <em id="scoreGain"></em>
+          </div>
+          <div class="target-strip" id="targetText">目标</div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board" id="board"></div>
+        </div>
+
+        <div class="tool-row">
+          <button class="tool-button" id="bombButton">炸弹 <b id="bombCount">0</b></button>
+          <button class="tool-button" id="shuffleButton">刷新 <b id="shuffleCount">0</b></button>
+          <button class="tool-button" id="pawButton">魔法爪 <b id="pawCount">0</b></button>
+        </div>
+      </section>
+
+      <section class="petbook-view hidden" id="petBookView">
+        <div class="game-header">
+          <button class="icon-button" id="petBackButton" title="返回首页">‹</button>
+          <div>
+            <p class="eyebrow">Collection</p>
+            <h2>宠物图鉴</h2>
+          </div>
+          <div class="coin-pill">金币 <b id="bookCoins">0</b></div>
+        </div>
+        <div class="pet-grid" id="petGrid"></div>
+      </section>
+
+      <section class="level-reward-view hidden" id="levelRewardView">
+        <div class="game-header">
+          <button class="icon-button" id="levelRewardBackButton" title="返回首页">‹</button>
+          <div>
+            <p class="eyebrow">Reward</p>
+            <h2>等级奖励</h2>
+          </div>
+          <div class="coin-pill">Lv.<b id="rewardLevelText">1</b></div>
+        </div>
+        <div class="reward-level-panel">
+          <div>
+            <span id="rewardExpTitle">距离下一级</span>
+            <strong id="rewardExpText">0/100</strong>
+          </div>
+          <i><em id="rewardExpFill"></em></i>
+        </div>
+        <button class="daily-reward-card" id="dailySignInRewardButton" type="button">
+          <span>每日奖励</span>
+          <strong id="dailyRewardText">签到领金币和经验</strong>
+        </button>
+        <div class="level-reward-list" id="levelRewardList"></div>
+      </section>
+
+      <section class="room-view hidden" id="roomView">
+        <div class="game-header">
+          <button class="icon-button" id="roomBackButton" title="返回首页">‹</button>
+          <div>
+            <p class="eyebrow">Room</p>
+            <h2>萌宠小屋</h2>
+          </div>
+          <div class="room-header-pills">
+            <div class="coin-pill">金币 <b id="roomCoins">0</b></div>
+            <div class="coin-pill">已入住 <b id="roomPetCount">0</b></div>
+          </div>
+        </div>
+        <div class="room-scene">
+          <div class="room-window"></div>
+          <button class="room-prop room-prop-food" id="roomFoodButton" type="button" aria-label="投喂" data-cost="50">
+            <span></span>
+          </button>
+          <button class="room-prop room-prop-toy" id="roomToyButton" type="button" aria-label="玩耍" data-cost="50">
+            <span></span>
+          </button>
+          <button class="room-prop room-prop-fish" id="roomFishButton" type="button" aria-label="鱼干零食" data-cost="50">
+            <span></span>
+          </button>
+          <div class="room-dialogue hidden" id="roomDialogue">点点宠物互动一下吧。</div>
+          <button class="room-sofa room-pet-seat" id="roomFeaturedPet" type="button">
+            <img class="room-pet-image hidden" id="roomFeaturedPetImage" src="" alt="" />
+            <span id="roomFeaturedPetFallback">待入住</span>
+          </button>
+          <div class="room-affinity hidden" id="roomAffinity">
+            <div>
+              <span id="roomAffinityLabel">亲密度 Lv.1</span>
+              <b id="roomAffinityValue">0/100</b>
+            </div>
+            <i><em id="roomAffinityFill"></em></i>
+          </div>
+          <p id="roomHint">解锁宠物后，它们会住进这里。</p>
+        </div>
+        <div class="room-pet-grid" id="roomPetGrid"></div>
+      </section>
+
+      <section class="task-view hidden" id="taskView">
+        <div class="game-header">
+          <button class="icon-button" id="taskBackButton" title="返回首页">‹</button>
+          <div>
+            <p class="eyebrow">Tasks</p>
+            <h2>每日任务</h2>
+          </div>
+          <div class="coin-pill">金币 <b id="taskCoins">0</b></div>
+        </div>
+        <div class="task-list" id="taskList"></div>
+      </section>
+    </main>
+
+    <div class="modal hidden" id="resultModal">
+      <div class="modal-card">
+        <p class="eyebrow" id="resultEyebrow">通关</p>
+        <h2 id="resultTitle">胜利</h2>
+        <p id="resultBody">获得奖励</p>
+        <div class="modal-actions" id="resultActions"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js?v=player-flow-qa"></script>
+  </body>
+</html>

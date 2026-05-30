@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="dried fish">
+  <defs>
+    <linearGradient id="base" x1="10" y1="7" x2="86" y2="91" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffefa"/>
+      <stop offset=".55" stop-color="#fff5df"/>
+      <stop offset="1" stop-color="#ffe4bf"/>
+    </linearGradient>
+    <linearGradient id="fish" x1="11" y1="28" x2="86" y2="75" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff0a0"/>
+      <stop offset=".48" stop-color="#ffc84a"/>
+      <stop offset="1" stop-color="#ed8c24"/>
+    </linearGradient>
+  </defs>
+  <rect x="5" y="5" width="86" height="86" rx="17" fill="url(#base)" stroke="#f3c9a8" stroke-width="3"/>
+  <path d="M15 13c10-5 56-5 66 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".72"/>
+  <ellipse cx="48" cy="78" rx="25" ry="7" fill="#8b603f" opacity=".16"/>
+  <path d="M65 47c7-8 14-13 23-16-3 9-5 16-5 23s2 14 5 23c-9-4-16-10-23-18-8 8-19 14-33 14-14 0-25-7-25-19 0-13 12-25 26-25 13 0 24 7 32 18Z" fill="url(#fish)" stroke="#a85a1d" stroke-width="3.4" stroke-linejoin="round"/>
+  <path d="M18 58c11 7 29 8 47-1-8 9-19 14-33 14-11 0-21-5-25-13 4 2 8 2 11 0Z" fill="#fff1a6" opacity=".58"/>
+  <circle cx="25" cy="48" r="5" fill="#4b2a1f"/>
+  <circle cx="26.8" cy="46.2" r="1.7" fill="#fff"/>
+  <path d="M22 33c5 7 5 17 0 27M37 34c5 8 5 19 0 29M52 39c4 6 4 14 0 20" fill="none" stroke="#fff7bf" stroke-width="3.3" stroke-linecap="round"/>
+  <path d="M31 43l8-5M30 55l9 4M45 44l9-5M45 56l8 4M61 43c4 6 4 15 0 22" fill="none" stroke="#b8641f" stroke-width="2.2" stroke-linecap="round" opacity=".62"/>
+  <path d="M14 57c8 2.8 18 2.7 31-.8" fill="none" stroke="#fff9d3" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+</svg>

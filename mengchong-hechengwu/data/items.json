@@ -1,0 +1,20 @@
+[
+  {
+    "id": "bomb",
+    "name": "炸弹",
+    "description": "消除目标格周围一圈元素",
+    "priceCoins": 300
+  },
+  {
+    "id": "shuffle",
+    "name": "刷新",
+    "description": "重排当前棋盘",
+    "priceCoins": 200
+  },
+  {
+    "id": "magic_paw",
+    "name": "魔法爪",
+    "description": "指定消除一个格子",
+    "priceCoins": 500
+  }
+]
