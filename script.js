@@ -20,16 +20,25 @@ const proofModalTitle = document.querySelector("[data-proof-modal-title]");
 const proofModalDetails = document.querySelector("[data-proof-modal-details]");
 const proofModalCopy = document.querySelector("[data-proof-copy]");
 const proofModalContact = document.querySelector("[data-proof-contact]");
+const horizontalWork = document.querySelector("[data-horizontal-work]");
+const workViewport = document.querySelector("[data-work-viewport]");
+const workTrack = document.querySelector("[data-work-track]");
+const workCards = Array.from(document.querySelectorAll("[data-work-track] .project-board"));
+const workCurrent = document.querySelector("[data-work-current]");
 let glitchChars = [];
 let activeProofCard = null;
 let pointerFrame = null;
 let scrollFrame = null;
 let scrollResumeTimer = null;
+let workResizeFrame = null;
 let canvasFrame = null;
 let canvasVisible = true;
 let scrolling = false;
 let lastCanvasTime = 0;
 let lastActiveUpdate = 0;
+let workEnabled = false;
+let workMaxX = 0;
+let workScrollDistance = 1;
 
 let width = 0;
 let height = 0;
@@ -198,6 +207,80 @@ function updateHeroScroll() {
   heroFrame.style.setProperty("--hero-scale", String(1 + progress * 0.08));
 }
 
+function setupHorizontalWork() {
+  if (!horizontalWork || !workViewport || !workTrack || workCards.length < 2) return;
+  if (workResizeFrame) cancelAnimationFrame(workResizeFrame);
+
+  workResizeFrame = requestAnimationFrame(() => {
+    const desktopQuery = window.matchMedia("(min-width: 981px) and (hover: hover)");
+    workEnabled = desktopQuery.matches && !prefersReducedMotion;
+    document.documentElement.classList.toggle("horizontal-work-ready", workEnabled);
+
+    if (!workEnabled) {
+      horizontalWork.style.removeProperty("--work-scroll-height");
+      horizontalWork.style.setProperty("--work-progress", "0");
+      horizontalWork.style.setProperty("--work-track-x", "0px");
+      workCards.forEach((card) => {
+        card.classList.remove("is-work-active");
+        card.style.removeProperty("--work-card-scale");
+        card.style.removeProperty("--work-card-y");
+        card.style.removeProperty("--work-card-opacity");
+      });
+      return;
+    }
+
+    workMaxX = Math.max(0, workTrack.scrollWidth - workViewport.clientWidth);
+    workScrollDistance = Math.max(window.innerHeight * 1.55, workMaxX * (isEdge ? 1.12 : 1.02));
+    horizontalWork.style.setProperty("--work-scroll-height", `${window.innerHeight + workScrollDistance}px`);
+    updateHorizontalWork();
+    workResizeFrame = null;
+  });
+}
+
+function updateHorizontalWork() {
+  if (!workEnabled || !horizontalWork || !workViewport || !workTrack) return;
+
+  const stickyTop = 76;
+  const sectionStart = horizontalWork.offsetTop - stickyTop;
+  const progress = Math.min(1, Math.max(0, (window.scrollY - sectionStart) / workScrollDistance));
+  const trackX = -workMaxX * progress;
+  const viewportCenter = workViewport.clientWidth * 0.5;
+  let activeIndex = 0;
+  let nearestDistance = Infinity;
+
+  horizontalWork.style.setProperty("--work-progress", progress.toFixed(4));
+  horizontalWork.style.setProperty("--work-track-x", `${trackX.toFixed(2)}px`);
+
+  workCards.forEach((card, index) => {
+    const cardCenter = card.offsetLeft + card.offsetWidth * 0.5 + trackX;
+    const distance = Math.abs(cardCenter - viewportCenter);
+    const focus = Math.max(0, 1 - distance / Math.max(viewportCenter, card.offsetWidth));
+    const scale = (isEdge ? 0.95 : 0.92) + focus * (isEdge ? 0.05 : 0.08);
+    const opacity = (isEdge ? 0.7 : 0.58) + focus * (isEdge ? 0.3 : 0.42);
+
+    card.style.setProperty("--work-card-scale", scale.toFixed(4));
+    card.style.setProperty("--work-card-y", `${((1 - focus) * (isEdge ? 10 : 18)).toFixed(2)}px`);
+    card.style.setProperty("--work-card-opacity", opacity.toFixed(4));
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      activeIndex = index;
+    }
+  });
+
+  workCards.forEach((card, index) => card.classList.toggle("is-work-active", index === activeIndex));
+  if (workCurrent) workCurrent.textContent = String(activeIndex + 1).padStart(2, "0");
+}
+
+function updateMobileWorkProgress() {
+  if (workEnabled || !horizontalWork || !workViewport || workCards.length < 2) return;
+  const maxScroll = Math.max(1, workViewport.scrollWidth - workViewport.clientWidth);
+  const progress = Math.min(1, Math.max(0, workViewport.scrollLeft / maxScroll));
+  const activeIndex = Math.min(workCards.length - 1, Math.round(progress * (workCards.length - 1)));
+  horizontalWork.style.setProperty("--work-progress", progress.toFixed(4));
+  if (workCurrent) workCurrent.textContent = String(activeIndex + 1).padStart(2, "0");
+}
+
 function handleScroll() {
   scrolling = true;
   if (scrollResumeTimer) {
@@ -217,6 +300,7 @@ function handleScroll() {
       lastActiveUpdate = now;
     }
     updateHeroScroll();
+    updateHorizontalWork();
     scrollFrame = null;
   });
 }
@@ -613,7 +697,9 @@ if (copyTemplateButton && consultTemplate) {
 }
 
 window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", setupHorizontalWork);
 window.addEventListener("scroll", handleScroll, { passive: true });
+workViewport?.addEventListener("scroll", updateMobileWorkProgress, { passive: true });
 
 if (heroFrame) {
   heroFrame.addEventListener("pointermove", queuePointerFrame);
@@ -625,6 +711,7 @@ if (heroFrame) {
 
 prepareGlitchTitle();
 resizeCanvas();
+setupHorizontalWork();
 if (window.location.hash === "#hero") {
   window.scrollTo(0, 0);
 }
@@ -637,5 +724,6 @@ window.addEventListener("load", () => {
     window.scrollTo(0, 0);
     updateActiveSection();
     updateHeroScroll();
+    updateHorizontalWork();
   }
 });

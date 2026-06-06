@@ -158,12 +158,14 @@
         </div>
       </section>
 
-      <section class="content-section decomposed-section work-island" id="work">
-        <div class="section-heading reveal">
-          <p class="section-number">03 / Selected Work</p>
-          <h2>Selected work / 作品项目</h2>
-        </div>
-        <div class="work-grid">
+      <section class="content-section decomposed-section work-island" id="work" data-horizontal-work>
+        <div class="work-sticky">
+          <div class="section-heading reveal">
+            <p class="section-number">03 / Selected Work</p>
+            <h2>Selected work / 作品项目</h2>
+          </div>
+          <div class="work-viewport" data-work-viewport>
+            <div class="work-grid" data-work-track>
           <article class="work-card project-board reveal">
             <div class="work-visual visual-a">
               <img src="assets/brand-site.svg" alt="个人品牌网站视觉缩略图">
@@ -236,6 +238,14 @@
               </div>
             </div>
           </article>
+            </div>
+          </div>
+          <div class="work-progress" data-work-progress aria-hidden="true">
+            <span class="work-progress-current" data-work-current>01</span>
+            <span class="work-progress-rail"><i></i></span>
+            <span>04</span>
+            <span class="work-progress-label">Scroll to explore</span>
+          </div>
         </div>
       </section>
 

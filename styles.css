@@ -3344,6 +3344,197 @@ body {
   }
 }
 
+/* Selected work: native vertical scrolling drives a horizontal gallery on desktop. */
+.work-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  color: rgba(16, 18, 20, 0.62);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+}
+
+.work-progress-rail {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(16, 18, 20, 0.14);
+}
+
+.work-progress-rail i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #2f8f7c, #d99a3d);
+  transform: scaleX(var(--work-progress, 0));
+  transform-origin: left center;
+}
+
+.work-progress-current {
+  min-width: 20px;
+  color: #245f52;
+  font-weight: 700;
+}
+
+.work-progress-label {
+  margin-left: 6px;
+  text-transform: uppercase;
+}
+
+@media (min-width: 981px) and (hover: hover) {
+  html.horizontal-work-ready .work-island {
+    --work-progress: 0;
+    --work-track-x: 0px;
+    position: relative;
+    height: var(--work-scroll-height, 260vh);
+    padding: 0;
+    overflow: visible;
+  }
+
+  html.horizontal-work-ready .work-sticky {
+    position: sticky;
+    top: 76px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 92px);
+    min-height: 620px;
+    padding: clamp(28px, 4vh, 48px) clamp(24px, 4vw, 48px) 28px;
+    overflow: hidden;
+  }
+
+  html.horizontal-work-ready .work-sticky .section-heading {
+    flex: 0 0 auto;
+    margin-bottom: clamp(20px, 3vh, 34px);
+  }
+
+  html.horizontal-work-ready .work-viewport {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  html.horizontal-work-ready .work-island .work-grid {
+    display: flex;
+    align-items: stretch;
+    width: max-content;
+    height: 100%;
+    gap: clamp(22px, 2.4vw, 34px);
+    transform: translate3d(var(--work-track-x), 0, 0);
+    will-change: transform;
+  }
+
+  html.horizontal-work-ready .project-board {
+    --work-card-scale: 0.92;
+    --work-card-y: 18px;
+    --work-card-opacity: 0.58;
+    --work-card-rotate: 0deg;
+    flex: 0 0 clamp(430px, 47vw, 650px);
+    height: 100%;
+    max-height: 590px;
+    opacity: var(--work-card-opacity);
+    transform:
+      translate3d(0, var(--work-card-y), 0)
+      rotate(var(--work-card-rotate))
+      scale(var(--work-card-scale));
+    transform-origin: center center;
+    transition: opacity 160ms linear, border-color 180ms ease, box-shadow 180ms ease;
+    will-change: transform, opacity;
+  }
+
+  html.horizontal-work-ready .project-board:nth-child(1) {
+    --work-card-rotate: -1.4deg;
+  }
+
+  html.horizontal-work-ready .project-board:nth-child(2) {
+    --work-card-rotate: 1deg;
+  }
+
+  html.horizontal-work-ready .project-board:nth-child(3) {
+    --work-card-rotate: -0.7deg;
+  }
+
+  html.horizontal-work-ready .project-board:nth-child(4) {
+    --work-card-rotate: 0.8deg;
+  }
+
+  html.horizontal-work-ready .project-board.is-work-active {
+    border-color: rgba(47, 143, 124, 0.34);
+    box-shadow: 0 28px 70px rgba(26, 44, 39, 0.18);
+  }
+
+  html.horizontal-work-ready .project-board:hover {
+    border-color: rgba(47, 143, 124, 0.46);
+  }
+}
+
+@media (max-width: 980px), (hover: none) {
+  .work-island {
+    padding-block: 64px;
+  }
+
+  .work-viewport {
+    margin-inline: -18px;
+    padding-inline: 18px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .work-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work-island .work-grid {
+    display: flex;
+    width: max-content;
+    gap: 16px;
+  }
+
+  .work-island .project-board {
+    flex: 0 0 min(82vw, 430px);
+    scroll-snap-align: center;
+    transform: none;
+  }
+
+  .work-progress-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.horizontal-work-ready .work-island {
+    height: auto;
+    padding: 92px clamp(18px, 4vw, 44px);
+  }
+
+  html.horizontal-work-ready .work-sticky {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  html.horizontal-work-ready .work-viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  html.horizontal-work-ready .work-island .work-grid {
+    transform: none;
+    will-change: auto;
+  }
+
+  html.horizontal-work-ready .project-board {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
 /* Light editorial polish */
 .hero-frame {
   min-height: clamp(720px, calc(100vh - 132px), 930px);
