@@ -6,6 +6,7 @@ const ctx = canvas && useCanvas ? canvas.getContext("2d", { alpha: true }) : nul
 const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
 const sections = Array.from(document.querySelectorAll("section[id]"));
 const revealItems = Array.from(document.querySelectorAll(".reveal"));
+const siteHeader = document.querySelector(".site-header");
 const heroFrame = document.querySelector("[data-parallax-root]");
 const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
@@ -641,14 +642,39 @@ if (heroSection) {
   heroObserver.observe(heroSection);
 }
 
+function navigateToSection(targetId, { replace = false } = {}) {
+  if (!targetId || targetId === "#") return;
+
+  const target = document.querySelector(targetId);
+  if (!target) return;
+
+  const headerOffset = siteHeader?.offsetHeight || 0;
+  const targetTop =
+    targetId === "#hero"
+      ? 0
+      : Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerOffset - 16);
+
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.history[replace ? "replaceState" : "pushState"](null, "", targetId);
+  window.scrollTo({ top: targetTop, behavior: "auto" });
+
+  requestAnimationFrame(() => {
+    root.style.scrollBehavior = previousScrollBehavior;
+    updateActiveSection();
+    updateHeroScroll();
+    updateHorizontalWork();
+  });
+}
+
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     const targetId = link.getAttribute("href");
-    if (targetId === "#hero") {
-      event.preventDefault();
-      window.history.replaceState(null, "", "#hero");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    if (!targetId || !document.querySelector(targetId)) return;
+
+    event.preventDefault();
+    navigateToSection(targetId, { replace: targetId === "#hero" });
   });
 });
 

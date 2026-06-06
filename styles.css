@@ -425,6 +425,7 @@ h3 {
   right: clamp(42px, 7vw, 96px);
   bottom: clamp(32px, 5vw, 58px);
   z-index: 2;
+  pointer-events: none;
   height: min(285px, 39%);
   overflow: hidden;
   border: 1px solid rgba(246, 241, 229, 0.28);
@@ -4031,12 +4032,15 @@ html.is-edge .hero-frame.motion-active .glitch-title,
 }
 
 .floating-lines-ready .hero-frame-nav,
-.floating-lines-ready .hero-copy,
 .floating-lines-ready .site-preview-window,
 .floating-lines-ready .material-object,
 .floating-lines-ready .work-fragment,
 .floating-lines-ready .scroll-cue {
   z-index: 2;
+}
+
+.floating-lines-ready .hero-copy {
+  z-index: 4;
 }
 
 .floating-lines-ready .hero-frame-nav,
