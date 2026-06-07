@@ -2340,6 +2340,26 @@ body.modal-open .scroll-index {
   transform: translateY(-10px) rotate(0deg);
 }
 
+.project-link-card {
+  color: inherit;
+  cursor: pointer;
+}
+
+.project-link-card .work-visual img {
+  transition: transform 420ms ease, filter 420ms ease;
+}
+
+.project-link-card:hover .work-visual img {
+  transform: scale(1.025);
+  filter: saturate(1.06) contrast(1.02);
+}
+
+.project-visit {
+  color: #fffdf7;
+  background: #202323;
+  border-color: #202323;
+}
+
 .project-board .tagline {
   color: #2b6659;
 }
