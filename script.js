@@ -688,6 +688,12 @@ proofCards.forEach((card) => {
   });
 });
 
+document.querySelectorAll("[data-project-visit]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+});
+
 document.querySelectorAll("[data-proof-close]").forEach((control) => {
   control.addEventListener("click", closeProofModal);
 });
