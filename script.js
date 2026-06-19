@@ -4,10 +4,11 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const useCanvas = false;
 const ctx = canvas && useCanvas ? canvas.getContext("2d", { alpha: true }) : null;
 const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
-const sections = Array.from(document.querySelectorAll("section[id]"));
+const sections = Array.from(document.querySelectorAll("section[id]:not([hidden])"));
 const revealItems = Array.from(document.querySelectorAll(".reveal"));
 const siteHeader = document.querySelector(".site-header");
 const heroFrame = document.querySelector("[data-parallax-root]");
+const heroLoopVideos = Array.from(document.querySelectorAll("[data-hero-loop-video]"));
 const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
 const copyTemplateButton = document.querySelector("[data-copy-template]");
@@ -26,12 +27,28 @@ const workViewport = document.querySelector("[data-work-viewport]");
 const workTrack = document.querySelector("[data-work-track]");
 const workCards = Array.from(document.querySelectorAll("[data-work-track] .project-board"));
 const workCurrent = document.querySelector("[data-work-current]");
+const interactionGallery = document.querySelector("[data-interaction-gallery]");
+const interactionCards = Array.from(document.querySelectorAll("[data-interaction-card]"));
+const dotFieldMounts = Array.from(document.querySelectorAll("[data-dot-field]"));
+const interactionModal = document.querySelector("[data-interaction-modal]");
+const interactionOpenButtons = Array.from(document.querySelectorAll("[data-interaction-open]"));
+const interactionCloseControls = Array.from(document.querySelectorAll("[data-interaction-close]"));
+const interactionContact = document.querySelector("[data-interaction-contact]");
+const validationSwap = document.querySelector("[data-validation-swap]");
+const swapCards = Array.from(document.querySelectorAll("[data-swap-card]"));
+const swapCurrent = document.querySelector("[data-swap-current]");
+const swapBar = document.querySelector("[data-swap-bar]");
+const swapPrevButton = document.querySelector("[data-swap-prev]");
+const swapNextButton = document.querySelector("[data-swap-next]");
+const proofOpenButtons = Array.from(document.querySelectorAll("[data-proof-open]"));
 let glitchChars = [];
 let activeProofCard = null;
 let pointerFrame = null;
 let scrollFrame = null;
 let scrollResumeTimer = null;
 let workResizeFrame = null;
+let swapTimer = null;
+let swapIndex = 0;
 let canvasFrame = null;
 let canvasVisible = true;
 let scrolling = false;
@@ -39,6 +56,370 @@ let lastCanvasTime = 0;
 let lastActiveUpdate = 0;
 let workEnabled = false;
 let workMaxX = 0;
+let interactionGalleryFrame = null;
+let interactionGalleryCurrent = 0;
+let interactionGalleryTarget = 0;
+let interactionGalleryDragging = false;
+let interactionGalleryStartX = 0;
+let interactionGalleryStartTarget = 0;
+let dotFieldInstances = [];
+
+function initHeroVideoLoop() {
+  if (heroLoopVideos.length < 2) return;
+
+  const fadeMs = 720;
+  const fadeSeconds = fadeMs / 1000;
+  let activeIndex = 0;
+  let switching = false;
+  let monitorFrame = null;
+
+  heroLoopVideos.forEach((video, index) => {
+    video.muted = true;
+    video.loop = false;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.classList.toggle("is-active", index === activeIndex);
+    video.setAttribute("aria-hidden", index === activeIndex ? "false" : "true");
+  });
+
+  const playSafely = (video) => {
+    const promise = video.play();
+    if (promise && typeof promise.catch === "function") {
+      promise.catch(() => {});
+    }
+  };
+
+  const swapVideos = () => {
+    if (switching) return;
+
+    const current = heroLoopVideos[activeIndex];
+    const nextIndex = (activeIndex + 1) % heroLoopVideos.length;
+    const next = heroLoopVideos[nextIndex];
+
+    switching = true;
+    next.currentTime = 0;
+    next.setAttribute("aria-hidden", "false");
+    playSafely(next);
+
+    requestAnimationFrame(() => {
+      next.classList.add("is-active");
+      current.classList.remove("is-active");
+      current.setAttribute("aria-hidden", "true");
+    });
+
+    window.setTimeout(() => {
+      current.pause();
+      current.currentTime = 0;
+      activeIndex = nextIndex;
+      switching = false;
+    }, fadeMs + 80);
+  };
+
+  const monitor = () => {
+    const active = heroLoopVideos[activeIndex];
+    const duration = Number.isFinite(active.duration) ? active.duration : 0;
+    const startFadeAt = Math.max(0.2, duration - Math.max(fadeSeconds, 0.82));
+
+    if (duration > 0 && active.currentTime >= startFadeAt) {
+      swapVideos();
+    } else if (!switching && active.ended) {
+      swapVideos();
+    }
+
+    monitorFrame = requestAnimationFrame(monitor);
+  };
+
+  const first = heroLoopVideos[activeIndex];
+  playSafely(first);
+  monitorFrame = requestAnimationFrame(monitor);
+
+  document.addEventListener("visibilitychange", () => {
+    const active = heroLoopVideos[activeIndex];
+    if (document.hidden) {
+      active.pause();
+      if (monitorFrame) cancelAnimationFrame(monitorFrame);
+      monitorFrame = null;
+    } else {
+      playSafely(active);
+      if (!monitorFrame) monitorFrame = requestAnimationFrame(monitor);
+    }
+  });
+}
+
+const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
+
+function hexToRgb(hex) {
+  const normalized = hex.replace("#", "");
+  const value = parseInt(
+    normalized.length === 3
+      ? normalized.split("").map((char) => char + char).join("")
+      : normalized,
+    16
+  );
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function mixRgb(from, to, amount) {
+  return {
+    r: Math.round(from.r + (to.r - from.r) * amount),
+    g: Math.round(from.g + (to.g - from.g) * amount),
+    b: Math.round(from.b + (to.b - from.b) * amount),
+  };
+}
+
+function initDotField(mount) {
+  if (!mount) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "interaction-dot-field";
+  const dotCanvas = document.createElement("canvas");
+  const dotCtx = dotCanvas.getContext("2d");
+  wrapper.appendChild(dotCanvas);
+  mount.replaceChildren(wrapper);
+
+  const options = {
+    dotRadius: 1.5,
+    dotSpacing: 14,
+    bulgeStrength: 67,
+    glowRadius: 160,
+    cursorRadius: 500,
+    cursorForce: 0.1,
+    gradientFrom: "#A855F7",
+    gradientTo: "#B497CF",
+    glowColor: "#120F17",
+  };
+  const mouse = { x: 0.5, y: 0.5, active: false };
+  const smoothMouse = { x: 0.5, y: 0.5 };
+  const from = hexToRgb(options.gradientFrom);
+  const to = hexToRgb(options.gradientTo);
+  const glow = hexToRgb(options.glowColor);
+  let width = 1;
+  let height = 1;
+  let dpr = 1;
+  let points = [];
+
+  const createPoints = () => {
+    const cols = Math.ceil(width / options.dotSpacing) + 2;
+    const rows = Math.ceil(height / options.dotSpacing) + 2;
+    const offsetX = (width - (cols - 1) * options.dotSpacing) / 2;
+    const offsetY = (height - (rows - 1) * options.dotSpacing) / 2;
+    points = [];
+
+    for (let y = 0; y < rows; y += 1) {
+      for (let x = 0; x < cols; x += 1) {
+        points.push({
+          x: offsetX + x * options.dotSpacing,
+          y: offsetY + y * options.dotSpacing,
+          ratio: x / Math.max(cols - 1, 1),
+        });
+      }
+    }
+  };
+
+  const resize = () => {
+    const rect = wrapper.getBoundingClientRect();
+    width = Math.max(1, rect.width);
+    height = Math.max(1, rect.height);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dotCanvas.width = Math.round(width * dpr);
+    dotCanvas.height = Math.round(height * dpr);
+    dotCanvas.style.width = `${width}px`;
+    dotCanvas.style.height = `${height}px`;
+    dotCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    createPoints();
+  };
+
+  const render = () => {
+    smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+    smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+    const cursorX = smoothMouse.x * width;
+    const cursorY = smoothMouse.y * height;
+
+    dotCtx.clearRect(0, 0, width, height);
+    const glowGradient = dotCtx.createRadialGradient(cursorX, cursorY, 0, cursorX, cursorY, options.glowRadius);
+    glowGradient.addColorStop(0, `rgba(${glow.r}, ${glow.g}, ${glow.b}, 0.92)`);
+    glowGradient.addColorStop(1, `rgba(${glow.r}, ${glow.g}, ${glow.b}, 0)`);
+    dotCtx.fillStyle = glowGradient;
+    dotCtx.fillRect(0, 0, width, height);
+
+    points.forEach((point) => {
+      const dx = point.x - cursorX;
+      const dy = point.y - cursorY;
+      const distance = Math.hypot(dx, dy);
+      const influence = mouse.active ? Math.max(0, 1 - distance / options.cursorRadius) : 0;
+      const power = influence * influence;
+      const angle = Math.atan2(dy, dx);
+      const displacement = power * options.bulgeStrength * options.cursorForce;
+      const x = point.x + Math.cos(angle) * displacement;
+      const y = point.y + Math.sin(angle) * displacement;
+      const color = mixRgb(from, to, point.ratio);
+      const alpha = clampNumber(0.3 + power * 0.58, 0.12, 1);
+      const radius = options.dotRadius + power * options.dotRadius * 1.45;
+
+      dotCtx.beginPath();
+      dotCtx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
+      dotCtx.arc(x, y, radius, 0, Math.PI * 2);
+      dotCtx.fill();
+    });
+
+    requestAnimationFrame(render);
+  };
+
+  wrapper.addEventListener("pointermove", (event) => {
+    const rect = wrapper.getBoundingClientRect();
+    mouse.x = (event.clientX - rect.left) / rect.width;
+    mouse.y = (event.clientY - rect.top) / rect.height;
+    mouse.active = true;
+    wrapper.style.setProperty("--cursor-x", `${mouse.x * 100}%`);
+    wrapper.style.setProperty("--cursor-y", `${mouse.y * 100}%`);
+  });
+
+  wrapper.addEventListener("pointerleave", () => {
+    mouse.active = false;
+  });
+
+  window.addEventListener("resize", resize);
+  resize();
+  render();
+
+  return { resize, wrapper };
+}
+
+function openInteractionModal() {
+  if (!interactionModal) return;
+  interactionModal.hidden = false;
+  document.body.classList.add("interaction-modal-open", "modal-open");
+  requestAnimationFrame(() => {
+    dotFieldInstances.forEach((instance) => instance.resize());
+  });
+}
+
+function closeInteractionModal() {
+  if (!interactionModal) return;
+  interactionModal.hidden = true;
+  document.body.classList.remove("interaction-modal-open", "modal-open");
+}
+
+function updateInteractionGallery() {
+  if (!interactionGallery || !interactionCards.length || window.innerWidth <= 760) return;
+
+  interactionGalleryCurrent += (interactionGalleryTarget - interactionGalleryCurrent) * 0.05;
+  const count = interactionCards.length;
+  const rect = interactionGallery.getBoundingClientRect();
+  const radius = Math.max(420, rect.width * 0.48);
+  const angleStep = Math.PI / 7;
+  const centerOffset = count * 500;
+
+  interactionCards.forEach((card, index) => {
+    const rawOffset = index - (interactionGalleryCurrent % count);
+    const wrappedOffset = ((rawOffset + count / 2 + centerOffset) % count) - count / 2;
+    const angle = wrappedOffset * angleStep;
+    const depth = Math.cos(angle);
+    const x = Math.sin(angle) * radius;
+    const z = depth * radius - radius;
+    const y = Math.abs(wrappedOffset) * Math.abs(wrappedOffset) * 9;
+    const rotateY = -angle * 0.78;
+    const rotateZ = wrappedOffset * -1.8;
+    const opacity = clampNumber(1.18 - Math.abs(wrappedOffset) * 0.18, 0.16, 1);
+    const brightness = clampNumber(1.08 - Math.abs(wrappedOffset) * 0.12, 0.42, 1);
+
+    card.style.zIndex = String(Math.round((depth + 1) * 100));
+    card.style.opacity = String(opacity);
+    card.style.filter = `brightness(${brightness})`;
+    card.style.transform = [
+      "translate(-50%, -50%)",
+      `translate3d(${x}px, ${y}px, ${z}px)`,
+      `rotateY(${rotateY}rad)`,
+      `rotateZ(${rotateZ}deg)`,
+    ].join(" ");
+  });
+
+  interactionGalleryFrame = requestAnimationFrame(updateInteractionGallery);
+}
+
+function resetInteractionGalleryMobile() {
+  if (window.innerWidth > 760) return;
+  interactionCards.forEach((card) => {
+    card.style.removeProperty("z-index");
+    card.style.removeProperty("opacity");
+    card.style.removeProperty("filter");
+    card.style.removeProperty("transform");
+  });
+}
+
+function initInteractionLab() {
+  dotFieldInstances = dotFieldMounts.map(initDotField).filter(Boolean);
+  if (!interactionGallery || !interactionCards.length) return;
+
+  interactionOpenButtons.forEach((button) => {
+    button.addEventListener("pointerdown", (event) => {
+      event.stopPropagation();
+    });
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openInteractionModal();
+    });
+  });
+
+  interactionCloseControls.forEach((control) => {
+    control.addEventListener("click", closeInteractionModal);
+  });
+
+  interactionContact?.addEventListener("click", () => {
+    closeInteractionModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && interactionModal && !interactionModal.hidden) {
+      closeInteractionModal();
+    }
+  });
+
+  interactionGallery.addEventListener("wheel", (event) => {
+    if (window.innerWidth <= 760) return;
+    event.preventDefault();
+    interactionGalleryTarget += (event.deltaY || event.deltaX) * 0.012;
+  }, { passive: false });
+
+  interactionGallery.addEventListener("pointerdown", (event) => {
+    if (window.innerWidth <= 760) return;
+    interactionGalleryDragging = true;
+    interactionGalleryStartX = event.clientX;
+    interactionGalleryStartTarget = interactionGalleryTarget;
+    interactionGallery.classList.add("is-dragging");
+    interactionGallery.setPointerCapture(event.pointerId);
+  });
+
+  interactionGallery.addEventListener("pointermove", (event) => {
+    if (!interactionGalleryDragging || window.innerWidth <= 760) return;
+    const distance = event.clientX - interactionGalleryStartX;
+    interactionGalleryTarget = interactionGalleryStartTarget - distance * 0.036;
+  });
+
+  const stopDragging = (event) => {
+    interactionGalleryDragging = false;
+    interactionGallery.classList.remove("is-dragging");
+    if (interactionGallery.hasPointerCapture(event.pointerId)) {
+      interactionGallery.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  interactionGallery.addEventListener("pointerup", stopDragging);
+  interactionGallery.addEventListener("pointercancel", stopDragging);
+  window.addEventListener("resize", resetInteractionGalleryMobile);
+
+  if (!prefersReducedMotion) {
+    updateInteractionGallery();
+  } else {
+    resetInteractionGalleryMobile();
+  }
+}
 let workScrollDistance = 1;
 
 let width = 0;
@@ -627,6 +1008,26 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
+function releaseVisibleReveals() {
+  revealItems.forEach((item) => {
+    if (item.classList.contains("visible")) return;
+    const rect = item.getBoundingClientRect();
+    const withinViewport = rect.top < window.innerHeight * 1.18 && rect.bottom > -window.innerHeight * 0.18;
+    if (withinViewport) {
+      item.classList.add("visible");
+      revealObserver.unobserve(item);
+    }
+  });
+}
+
+window.addEventListener("load", () => {
+  setTimeout(releaseVisibleReveals, 900);
+});
+
+window.addEventListener("hashchange", () => {
+  setTimeout(releaseVisibleReveals, 450);
+});
+
 const heroObserver = new IntersectionObserver(
   ([entry]) => {
     canvasVisible = entry.isIntersecting;
@@ -668,6 +1069,56 @@ function navigateToSection(targetId, { replace = false } = {}) {
   });
 }
 
+function updateValidationSwap() {
+  if (!validationSwap || !swapCards.length) return;
+
+  swapCards.forEach((card, index) => {
+    const offset = (index - swapIndex + swapCards.length) % swapCards.length;
+    const visibleOffset = Math.min(offset, 2);
+    const isHidden = offset > 2;
+
+    card.style.setProperty("--swap-x", `${visibleOffset * 54}px`);
+    card.style.setProperty("--swap-y", `${visibleOffset * 40}px`);
+    card.style.setProperty("--swap-scale", String(1 - visibleOffset * 0.045));
+    card.style.setProperty("--swap-opacity", String(isHidden ? 0 : 1 - visibleOffset * 0.14));
+    card.style.setProperty("--swap-rotate", `${visibleOffset * -2.2}deg`);
+    card.style.setProperty("--swap-z", String(swapCards.length - offset));
+    card.classList.toggle("is-swap-active", offset === 0);
+    card.setAttribute("aria-hidden", isHidden ? "true" : "false");
+  });
+
+  if (swapCurrent) {
+    swapCurrent.textContent = String(swapIndex + 1).padStart(2, "0");
+  }
+
+  if (swapBar) {
+    swapBar.style.transform = `scaleX(${(swapIndex + 1) / swapCards.length})`;
+  }
+}
+
+function setValidationSwap(index) {
+  if (!swapCards.length) return;
+  swapIndex = (index + swapCards.length) % swapCards.length;
+  updateValidationSwap();
+}
+
+function stopValidationSwap() {
+  if (!swapTimer) return;
+  window.clearInterval(swapTimer);
+  swapTimer = null;
+}
+
+function startValidationSwap() {
+  stopValidationSwap();
+  updateValidationSwap();
+
+  if (!validationSwap || swapCards.length < 2 || prefersReducedMotion) return;
+
+  swapTimer = window.setInterval(() => {
+    setValidationSwap(swapIndex + 1);
+  }, 5000);
+}
+
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     const targetId = link.getAttribute("href");
@@ -677,6 +1128,44 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     navigateToSection(targetId, { replace: targetId === "#hero" });
   });
 });
+
+if (validationSwap) {
+  validationSwap.addEventListener("mouseenter", stopValidationSwap);
+  validationSwap.addEventListener("mouseleave", startValidationSwap);
+}
+
+swapCards.forEach((card, index) => {
+  card.addEventListener("click", () => {
+    setValidationSwap(index);
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setValidationSwap(index);
+    }
+  });
+});
+
+swapPrevButton?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  setValidationSwap(swapIndex - 1);
+});
+
+swapNextButton?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  setValidationSwap(swapIndex + 1);
+});
+
+proofOpenButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const card = button.closest("[data-swap-card]");
+    if (card) openProofModal(card);
+  });
+});
+
+startValidationSwap();
 
 proofCards.forEach((card) => {
   card.addEventListener("click", () => openProofModal(card));
@@ -742,6 +1231,8 @@ if (heroFrame) {
 }
 
 prepareGlitchTitle();
+initHeroVideoLoop();
+initInteractionLab();
 resizeCanvas();
 setupHorizontalWork();
 if (window.location.hash === "#hero") {

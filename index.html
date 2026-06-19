@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="鱼秋设计个人工作站｜个人品牌网站与创意落地页">
   <meta property="og:description" content="用审美、内容结构和网页技术，把想法做成可展示、可传播、可接单的页面。">
-  <link rel="stylesheet" href="styles.css?v=work-showcase-20260610">
+  <link rel="stylesheet" href="styles.css?v=interaction-modal-0618">
 </head>
 <body>
   <div class="site-shell">
@@ -26,8 +26,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#about">About</a>
         <a href="#work">Work</a>
-        <a href="#ai-proof">AI验证</a>
-        <a href="#validation-log">Log</a>
+        <a href="#interaction-lab">Lab</a>
         <a href="#stack">Services</a>
         <a href="#notes">Notes</a>
         <a href="#process">Process</a>
@@ -40,19 +39,26 @@
       <a href="#hero" data-section="01">Hero</a>
       <a href="#about" data-section="02">About</a>
       <a href="#work" data-section="03">Work</a>
-      <a href="#ai-proof" data-section="04">AI验证</a>
-      <a href="#validation-log" data-section="05">验证日志</a>
-      <a href="#stack" data-section="06">Services</a>
-      <a href="#story" data-section="07">Story</a>
-      <a href="#notes" data-section="08">Notes</a>
-      <a href="#process" data-section="09">Process</a>
-      <a href="#faq" data-section="10">FAQ</a>
-      <a href="#contact" data-section="11">Contact</a>
+      <a href="#interaction-lab" data-section="04">Lab</a>
+      <a href="#stack" data-section="05">Services</a>
+      <a href="#story" data-section="06">Story</a>
+      <a href="#notes" data-section="07">Notes</a>
+      <a href="#process" data-section="08">Process</a>
+      <a href="#faq" data-section="09">FAQ</a>
+      <a href="#contact" data-section="10">Contact</a>
     </aside>
 
     <main>
       <section class="hero section-panel" id="hero">
-        <div class="hero-frame" data-parallax-root>
+        <div class="hero-frame hero-video-bg" data-parallax-root>
+          <video class="hero-loop-video is-active" autoplay muted playsinline preload="metadata" poster="assets/hero-loop-poster.png" aria-label="鱼秋设计首屏循环作品视频" data-hero-loop-video>
+            <source src="assets/hero-loop-user.mp4" type="video/mp4">
+            <source src="assets/hero-loop-preview.webm" type="video/webm">
+          </video>
+          <video class="hero-loop-video" muted playsinline preload="auto" poster="assets/hero-loop-poster.png" aria-hidden="true" tabindex="-1" data-hero-loop-video>
+            <source src="assets/hero-loop-user.mp4" type="video/mp4">
+            <source src="assets/hero-loop-preview.webm" type="video/webm">
+          </video>
           <canvas class="hero-floating-lines" data-floating-lines aria-hidden="true"></canvas>
           <div class="hero-frame-nav">
             <a class="mini-brand" href="#hero">✦ 鱼秋设计个人工作站</a>
@@ -255,7 +261,88 @@
         </div>
       </section>
 
-      <section class="content-section decomposed-section validation-lab" id="ai-proof">
+      <section class="content-section decomposed-section interaction-lab-section" id="interaction-lab">
+        <div class="section-heading reveal">
+          <p class="section-number">04 / Interaction Lab</p>
+          <h2>Interaction Lab / 互动实验室</h2>
+        </div>
+        <p class="section-intro reveal">把可用于个人网站、作品集和品牌页的互动视觉效果先做成可运行样张。当前只开放 DotField，其他效果等待后续测试。</p>
+        <div class="interaction-gallery-shell reveal" data-interaction-gallery>
+          <div class="interaction-gallery-track" data-interaction-track>
+            <article class="interaction-card is-live" data-interaction-card>
+              <div class="interaction-card-stage" data-dot-field></div>
+              <div class="interaction-card-copy">
+                <span>Live effect</span>
+                <h3>DotField 点阵交互背景</h3>
+                <p>鼠标靠近时点阵产生轻微鼓起，适合作为黑色高级感网站里的低干扰动态背景。</p>
+                <button class="interaction-open-button" type="button" data-interaction-open>打开体验</button>
+              </div>
+            </article>
+            <article class="interaction-card is-soon" data-interaction-card>
+              <div class="interaction-soon">
+                <strong>敬请期待</strong>
+                <span>Coming soon</span>
+              </div>
+            </article>
+            <article class="interaction-card is-soon" data-interaction-card>
+              <div class="interaction-soon">
+                <strong>敬请期待</strong>
+                <span>Coming soon</span>
+              </div>
+            </article>
+            <article class="interaction-card is-soon" data-interaction-card>
+              <div class="interaction-soon">
+                <strong>敬请期待</strong>
+                <span>Coming soon</span>
+              </div>
+            </article>
+            <article class="interaction-card is-soon" data-interaction-card>
+              <div class="interaction-soon">
+                <strong>敬请期待</strong>
+                <span>Coming soon</span>
+              </div>
+            </article>
+          </div>
+          <div class="interaction-gallery-hint" aria-hidden="true">wheel / drag</div>
+        </div>
+      </section>
+
+      <div class="interaction-modal" data-interaction-modal hidden>
+        <div class="interaction-modal-backdrop" data-interaction-close></div>
+        <section class="interaction-modal-panel" role="dialog" aria-modal="true" aria-labelledby="interaction-modal-title">
+          <button class="interaction-modal-close" type="button" data-interaction-close aria-label="关闭互动体验">×</button>
+          <div class="interaction-modal-preview" data-dot-field data-interaction-modal-dot></div>
+          <div class="interaction-modal-content">
+            <span class="interaction-modal-kicker">Live interaction</span>
+            <h3 id="interaction-modal-title">DotField 点阵交互背景</h3>
+            <p>这个效果适合放在黑色高级感页面中，作为低干扰的动态背景。用户移动鼠标时，点阵会产生轻微鼓起和暗色聚光。</p>
+            <dl>
+              <div>
+                <dt>适合放哪里</dt>
+                <dd>首页背景、作品区视觉背景、互动展示区。</dd>
+              </div>
+              <div>
+                <dt>不适合放哪里</dt>
+                <dd>正文阅读区、FAQ、联系区，避免影响信息阅读。</dd>
+              </div>
+              <div>
+                <dt>当前参数</dt>
+                <dd>点距 14、半径 1.5、鼓起强度 67、鼠标范围 500。</dd>
+              </div>
+              <div>
+                <dt>使用建议</dt>
+                <dd>降低紫色亮度，控制点阵密度，保留黑白水晶玻璃主视觉。</dd>
+              </div>
+            </dl>
+            <div class="interaction-modal-actions">
+              <a class="button primary" href="#contact" data-interaction-contact>想用这个效果</a>
+              <button class="button ghost" type="button" data-interaction-close>关闭</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="content-section decomposed-section validation-lab" id="ai-proof" hidden data-client-hidden>
         <div class="section-heading reveal">
           <p class="section-number">04 / AI Validation</p>
           <h2>AI副业验证作品</h2>
@@ -264,6 +351,54 @@
         <div class="section-cta reveal">
           <a class="button primary" href="#contact">想做类似作品</a>
           <a class="button ghost" href="#stack">看交付方式</a>
+        </div>
+        <div class="validation-swap reveal" data-validation-swap aria-label="AI验证作品重点轮换">
+          <div class="validation-swap-copy">
+            <span>Featured validation</span>
+            <h3>先看最能说明交付能力的 3 个样张</h3>
+            <p>轮换区负责第一眼展示“能不能做出作品”，下方 6 个作品卡继续保留完整验证信息。</p>
+            <div class="validation-swap-progress" aria-hidden="true">
+              <span data-swap-current>01</span>
+              <i><b data-swap-bar></b></i>
+              <span>03</span>
+            </div>
+            <div class="validation-swap-actions" aria-label="切换重点作品">
+              <button class="swap-control" type="button" data-swap-prev aria-label="上一张重点作品">上一张</button>
+              <button class="swap-control" type="button" data-swap-next aria-label="下一张重点作品">下一张</button>
+            </div>
+          </div>
+          <div class="validation-card-stack" data-swap-stack>
+            <article class="validation-swap-card" data-swap-card data-detail-image="assets/ai-proof-kashmir-display.jpg" data-detail-images="assets/ai-proof-kashmir-display.jpg|assets/ai-proof-side-hustle-display.jpg|assets/ai-proof-delivery-first-display.jpg|assets/ai-proof-mindset-tools-display.jpg|assets/ai-proof-honest-start-display.jpg|assets/ai-proof-tool-fit-display.jpg" role="button" tabindex="0" aria-label="切换到小红书AI副业封面系统">
+              <img src="assets/ai-proof-kashmir-thumb.jpg" alt="小红书AI副业封面系统重点样张" loading="lazy" decoding="async">
+              <div>
+                <span>Cover System</span>
+                <em class="validation-status">验证中</em>
+                <h3>小红书AI副业封面系统</h3>
+                <p>验证 AI 能不能辅助做出更有点击感的小红书封面。</p>
+                <button class="validation-detail-button" type="button" data-proof-open>查看详情</button>
+              </div>
+            </article>
+            <article class="validation-swap-card" data-swap-card data-detail-image="assets/ai-carousel-tool-list-display.jpg" data-detail-images="assets/ai-carousel-tool-list-display.jpg|assets/ai-carousel-copywriting-tools-display.jpg|assets/ai-carousel-cover-tools-display.jpg|assets/ai-carousel-ppt-tools-display.jpg|assets/ai-carousel-video-tools-display.jpg|assets/ai-carousel-material-tools-display.jpg" role="button" tabindex="0" aria-label="切换到AI副业图文卡片">
+              <img src="assets/ai-carousel-tool-list-thumb.jpg" alt="AI副业图文卡片重点样张" loading="lazy" decoding="async">
+              <div>
+                <span>Carousel Note</span>
+                <em class="validation-status">可展示</em>
+                <h3>AI副业图文卡片</h3>
+                <p>把一个 AI 副业观点做成可阅读、可收藏的图文卡片。</p>
+                <button class="validation-detail-button" type="button" data-proof-open>查看详情</button>
+              </div>
+            </article>
+            <article class="validation-swap-card" data-swap-card data-detail-image="assets/ai-landing.svg" role="button" tabindex="0" aria-label="切换到0基础AI工具清单">
+              <img src="assets/ai-landing.svg" alt="0基础AI工具清单重点样张" loading="lazy" decoding="async">
+              <div>
+                <span>Tool List</span>
+                <em class="validation-status">验证中</em>
+                <h3>0基础AI工具清单</h3>
+                <p>不做工具大合集，只按真实任务整理工具和新手路径。</p>
+                <button class="validation-detail-button" type="button" data-proof-open>查看详情</button>
+              </div>
+            </article>
+          </div>
         </div>
         <div class="validation-grid">
           <article class="validation-card reveal" data-proof-card data-detail-image="assets/ai-proof-kashmir-display.jpg" data-detail-images="assets/ai-proof-kashmir-display.jpg|assets/ai-proof-side-hustle-display.jpg|assets/ai-proof-delivery-first-display.jpg|assets/ai-proof-mindset-tools-display.jpg|assets/ai-proof-honest-start-display.jpg|assets/ai-proof-tool-fit-display.jpg" role="button" tabindex="0" aria-label="查看小红书AI副业封面系统详情">
@@ -361,7 +496,7 @@
         </section>
       </div>
 
-      <section class="content-section decomposed-section validation-log" id="validation-log">
+      <section class="content-section decomposed-section validation-log" id="validation-log" hidden data-client-hidden>
         <div class="section-heading reveal">
           <p class="section-number">05 / Validation Log</p>
           <h2>验证日志</h2>
@@ -412,13 +547,13 @@
 
       <section class="content-section decomposed-section stack-lab" id="stack">
         <div class="section-heading reveal">
-          <p class="section-number">06 / Services</p>
+          <p class="section-number">05 / Services</p>
           <h2>目前可交付的小服务</h2>
         </div>
         <p class="section-intro reveal">先从具体、可交付的小需求开始：封面、卡片、清单、展示页、落地页和资料结构。</p>
         <div class="section-cta service-cta reveal">
           <a class="button primary" href="#contact">咨询一个小服务</a>
-          <a class="button ghost" href="#ai-proof">先看验证作品</a>
+          <a class="button ghost" href="#work">先看作品集</a>
         </div>
         <div class="stack-grid">
           <article class="stack-item service-card code-module reveal">
@@ -477,7 +612,7 @@
       <section class="content-section decomposed-section service-story" id="story">
         <div class="story-layout">
           <div class="story-sticky reveal">
-            <p class="section-number">07 / Service Story</p>
+            <p class="section-number">06 / Service Story</p>
             <h2>From rough idea to visible system.</h2>
             <p>从一个模糊想法，到一个能被看见、被理解、被咨询的页面。</p>
             <div class="story-window" aria-hidden="true">
@@ -523,7 +658,7 @@
 
       <section class="content-section decomposed-section notes-paper" id="notes">
         <div class="section-heading reveal">
-          <p class="section-number">08 / Notes</p>
+          <p class="section-number">07 / Notes</p>
           <h2>Notes / 审美与交付笔记</h2>
         </div>
         <p class="section-intro reveal">把审美判断、网页拆解、内容包装和交付经验沉淀成可复用的方法，而不是只停留在灵感截图里。</p>
@@ -560,7 +695,7 @@
 
       <section class="content-section decomposed-section process-map" id="process">
         <div class="section-heading reveal">
-          <p class="section-number">09 / Process</p>
+          <p class="section-number">08 / Process</p>
           <h2>Process / 工作方式</h2>
         </div>
         <p class="section-intro reveal">每一步都尽量清楚、可确认、可交付，避免项目只停留在“感觉不错”。</p>
@@ -594,7 +729,7 @@
 
       <section class="content-section decomposed-section faq-section" id="faq">
         <div class="section-heading reveal">
-          <p class="section-number">10 / FAQ</p>
+          <p class="section-number">09 / FAQ</p>
           <h2>FAQ / 常见问题</h2>
         </div>
         <div class="faq-list reveal">
@@ -625,7 +760,7 @@
         <div class="contact-inner material-contact reveal">
           <div class="contact-layout">
             <div class="contact-copy">
-              <p class="section-number">11 / Contact</p>
+              <p class="section-number">10 / Contact</p>
               <h2>如果你有一个想法，我可以帮你把它整理成可展示、可传播、可接单的页面。</h2>
               <p>如果你想把个人品牌、AI 创意项目或内容账号做得更有审美和专业感，欢迎带着想法来聊。我可以帮你把方向整理成页面、视觉系统和可交付的网页结果。</p>
               <div class="contact-brief">
@@ -646,7 +781,7 @@
                 <button class="copy-template" type="button" data-copy-template>复制咨询模板</button>
                 <a href="mailto:jinyan6181@qq.com">jinyan6181@qq.com</a>
                 <a href="#wechat">WeChat: A余人</a>
-                <span class="contact-soon">Xiaohongshu / 小余AI副业验证库</span>
+                <span class="contact-soon">Xiaohongshu / 鱼秋设计记录</span>
               </div>
             </div>
             <figure class="wechat-card" id="wechat">
@@ -663,6 +798,6 @@
   </div>
 
   <script src="hero-floating-lines.js"></script>
-  <script src="script.js?v=anchor-nav-20260607"></script>
+  <script src="script.js?v=interaction-modal-0618"></script>
 </body>
 </html>
