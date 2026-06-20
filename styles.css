@@ -7362,3 +7362,50 @@ body.interaction-modal-open {
     padding: 24px;
   }
 }
+
+/* Left rail leak fix: keep labels clipped until the rail intentionally opens. */
+.scroll-index {
+  contain: layout paint !important;
+  clip-path: inset(0 round 999px) !important;
+}
+
+.scroll-index:hover,
+.scroll-index:focus-within {
+  clip-path: inset(0 round 22px) !important;
+}
+
+.scroll-index a {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.scroll-index:not(:hover):not(:focus-within) a {
+  grid-template-columns: 34px 0 !important;
+  gap: 0 !important;
+  font-size: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+.scroll-index:not(:hover):not(:focus-within) a::after {
+  width: 0 !important;
+  opacity: 0 !important;
+}
+
+.scroll-index:hover a,
+.scroll-index:focus-within a {
+  grid-template-columns: 34px minmax(0, 92px) !important;
+  font-size: 12px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+@media (max-width: 1120px) {
+  .scroll-index:not(:hover):not(:focus-within) a {
+    grid-template-columns: 34px 0 !important;
+  }
+
+  .scroll-index:hover a,
+  .scroll-index:focus-within a {
+    grid-template-columns: 34px minmax(0, 76px) !important;
+  }
+}
