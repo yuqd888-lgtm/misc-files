@@ -7409,3 +7409,307 @@ body.interaction-modal-open {
     grid-template-columns: 34px minmax(0, 76px) !important;
   }
 }
+
+/* Black premium polish: monochrome glass, sharper typography, fewer AI-like colors. */
+:root {
+  --black-0: #030303;
+  --black-1: #070707;
+  --white-0: #ffffff;
+  --white-1: rgba(255, 255, 255, 0.78);
+  --white-2: rgba(255, 255, 255, 0.54);
+  --glass-fill: rgba(255, 255, 255, 0.055);
+  --glass-line: rgba(255, 255, 255, 0.16);
+  --glass-line-strong: rgba(255, 255, 255, 0.26);
+}
+
+html,
+body,
+.site-shell {
+  background: var(--black-0) !important;
+}
+
+body {
+  color: var(--white-0) !important;
+}
+
+.noise-layer {
+  opacity: 0.11 !important;
+  mix-blend-mode: screen !important;
+}
+
+main > .content-section:not(#hero),
+.content-section.decomposed-section:not(#hero) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 36%),
+    var(--black-0) !important;
+}
+
+.content-section::before,
+.decomposed-section::before,
+.content-section::after,
+.decomposed-section::after {
+  opacity: 0.18 !important;
+  filter: grayscale(1) !important;
+}
+
+.section-number,
+.section-heading h2,
+.section-heading p,
+.section-intro,
+.eyebrow,
+.hero-cn,
+.hero-cn-note,
+.tagline,
+.work-fit,
+.work-fit strong,
+.project-board h3,
+.project-board p,
+.work-meta span,
+.stack-item,
+.stack-item *,
+.service-card,
+.service-card *,
+.note-card,
+.note-card *,
+.process-card,
+.process-card *,
+.faq-item,
+.faq-item *,
+.contact-inner,
+.contact-inner *,
+.proof-modal,
+.proof-modal *,
+.interaction-modal,
+.interaction-modal * {
+  text-shadow: none !important;
+}
+
+.section-heading h2,
+.project-board h3,
+.stack-item h3,
+.service-card h3,
+.note-card h3,
+.process-card h3,
+.contact-inner h2,
+.proof-modal-content h3,
+.interaction-modal-content h3 {
+  color: var(--white-0) !important;
+  letter-spacing: 0 !important;
+}
+
+.section-intro,
+.section-heading p:not(.section-number),
+.project-board p,
+.work-fit,
+.stack-item p,
+.service-card p,
+.service-card li,
+.note-card p,
+.process-card p,
+.faq-item p,
+.contact-inner p,
+.proof-modal-details p,
+.interaction-modal-content p,
+.interaction-modal-content dd {
+  color: var(--white-1) !important;
+}
+
+.section-number,
+.tagline,
+.work-meta span,
+.service-card > span,
+.note-card span,
+.proof-modal-meta span,
+.proof-modal-meta em,
+.interaction-modal-kicker,
+.contact-brief span {
+  color: var(--white-2) !important;
+}
+
+.section-number {
+  letter-spacing: 0.11em !important;
+}
+
+.hero-frame,
+.project-board,
+.work-card,
+.stack-item,
+.service-card,
+.note-card,
+.process-card,
+.faq-item,
+.contact-inner,
+.interaction-gallery-shell,
+.interaction-card,
+.proof-modal-panel,
+.proof-modal-media,
+.proof-modal-content,
+.proof-modal-details,
+.interaction-modal-panel,
+.interaction-modal-content {
+  border-color: var(--glass-line) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.025) 42%, rgba(255, 255, 255, 0.06)),
+    rgba(0, 0, 0, 0.78) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.055),
+    0 26px 86px rgba(0, 0, 0, 0.58) !important;
+  backdrop-filter: blur(24px) saturate(1.04) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.04) !important;
+}
+
+.project-board:hover,
+.work-card:hover,
+.stack-item:hover,
+.service-card:hover,
+.note-card:hover,
+.process-card:hover,
+.faq-item:hover,
+.interaction-card:hover {
+  border-color: var(--glass-line-strong) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 34px 110px rgba(0, 0, 0, 0.68) !important;
+}
+
+.hero-frame::before,
+.hero-frame::after,
+.project-board::before,
+.project-board::after,
+.work-card::before,
+.work-card::after,
+.stack-item::before,
+.stack-item::after,
+.service-card::before,
+.service-card::after,
+.proof-modal-panel::before,
+.proof-modal-panel::after {
+  filter: grayscale(1) !important;
+  opacity: 0.36 !important;
+}
+
+.work-visual,
+.project-board .work-visual,
+.service-thumb,
+.note-thumb,
+.about-visual-card img,
+.interaction-card-stage,
+.interaction-modal-preview {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 60px rgba(0, 0, 0, 0.42) !important;
+}
+
+.work-visual img,
+.project-board .work-visual img,
+.service-thumb,
+.note-thumb,
+.proof-modal-media img,
+.validation-swap-card img,
+.validation-card img {
+  filter: saturate(0.86) contrast(1.04) brightness(0.98) !important;
+}
+
+.visual-chrome,
+.preview-chrome {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.work-meta span,
+.service-card > span,
+.note-card span,
+.validation-status,
+.proof-modal-meta span,
+.proof-modal-meta em,
+.interaction-modal-kicker,
+.contact-brief span {
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  box-shadow: none !important;
+}
+
+.button.primary,
+.header-cta,
+.project-visit,
+.project-actions .button.primary,
+.proof-modal-actions .button.primary,
+.interaction-open-button {
+  border-color: rgba(255, 255, 255, 0.82) !important;
+  background: #fff !important;
+  color: #030303 !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 18px 52px rgba(255, 255, 255, 0.08) !important;
+}
+
+.button.primary *,
+.header-cta *,
+.project-visit *,
+.project-actions .button.primary *,
+.proof-modal-actions .button.primary *,
+.interaction-open-button * {
+  color: #030303 !important;
+}
+
+.button.ghost,
+.project-actions .button.ghost,
+.proof-modal-actions .button.ghost,
+.proof-modal-download,
+.swap-control {
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.button:hover,
+.header-cta:hover,
+.project-visit:hover,
+.interaction-open-button:hover {
+  transform: translateY(-1px) !important;
+}
+
+.scroll-index {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.76) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.scroll-index a.active::before {
+  color: #030303 !important;
+  background: #fff !important;
+}
+
+.faq-item {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.78) !important;
+}
+
+.faq-toggle,
+.proof-modal-close,
+.interaction-modal-close {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .project-board,
+  .service-card,
+  .note-card,
+  .process-card,
+  .faq-item,
+  .interaction-card {
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      background 220ms ease !important;
+  }
+}
