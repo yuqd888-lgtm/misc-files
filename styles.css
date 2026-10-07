@@ -7052,6 +7052,17 @@ section[hidden],
   background: #08050d;
 }
 
+.interaction-card-stage::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-image: radial-gradient(circle, rgba(174, 122, 230, 0.74) 1.4px, transparent 1.8px);
+  background-size: 16px 16px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at 50% 42%, #000 9%, transparent 76%);
+  pointer-events: none;
+}
+
 .interaction-dot-field {
   position: absolute;
   inset: 0;
@@ -7739,4 +7750,9 @@ main > .content-section:not(#hero),
       box-shadow 220ms ease,
       background 220ms ease !important;
   }
+}
+
+main > .content-section:not(#hero) .interaction-open-button {
+  color: #030303 !important;
+  -webkit-text-fill-color: #030303 !important;
 }

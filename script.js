@@ -10,8 +10,6 @@ const siteHeader = document.querySelector(".site-header");
 const heroFrame = document.querySelector("[data-parallax-root]");
 const heroLoopVideo = document.querySelector("[data-hero-loop-video]");
 const heroMotionToggle = document.querySelector("[data-hero-motion-toggle]");
-const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
-const glitchTitle = document.querySelector("[data-glitch-title]");
 const copyTemplateButton = document.querySelector("[data-copy-template]");
 const consultTemplate = document.getElementById("consult-template");
 const proofCards = Array.from(document.querySelectorAll("[data-proof-card]"));
@@ -30,8 +28,8 @@ const workCards = Array.from(document.querySelectorAll("[data-work-track] .proje
 const workCurrent = document.querySelector("[data-work-current]");
 const interactionGallery = document.querySelector("[data-interaction-gallery]");
 const interactionCards = Array.from(document.querySelectorAll("[data-interaction-card]"));
-const dotFieldMounts = Array.from(document.querySelectorAll("[data-dot-field]"));
 const interactionModal = document.querySelector("[data-interaction-modal]");
+const modalDotFieldMount = document.querySelector("[data-interaction-modal-dot]");
 const interactionOpenButtons = Array.from(document.querySelectorAll("[data-interaction-open]"));
 const interactionCloseControls = Array.from(document.querySelectorAll("[data-interaction-close]"));
 const interactionContact = document.querySelector("[data-interaction-contact]");
@@ -42,9 +40,7 @@ const swapBar = document.querySelector("[data-swap-bar]");
 const swapPrevButton = document.querySelector("[data-swap-prev]");
 const swapNextButton = document.querySelector("[data-swap-next]");
 const proofOpenButtons = Array.from(document.querySelectorAll("[data-proof-open]"));
-let glitchChars = [];
 let activeProofCard = null;
-let pointerFrame = null;
 let scrollFrame = null;
 let scrollResumeTimer = null;
 let workResizeFrame = null;
@@ -283,6 +279,9 @@ function openInteractionModal() {
   if (!interactionModal) return;
   interactionModal.hidden = false;
   document.body.classList.add("interaction-modal-open", "modal-open");
+  if (!dotFieldInstances.length && modalDotFieldMount) {
+    dotFieldInstances = [initDotField(modalDotFieldMount)].filter(Boolean);
+  }
   dotFieldInstances.forEach((instance) => instance.refresh());
   stopInteractionGallery();
   requestAnimationFrame(() => {
@@ -367,7 +366,6 @@ function resetInteractionGalleryMobile() {
 }
 
 function initInteractionLab() {
-  dotFieldInstances = dotFieldMounts.map(initDotField).filter(Boolean);
   if (!interactionGallery || !interactionCards.length) return;
 
   interactionOpenButtons.forEach((button) => {
@@ -457,36 +455,6 @@ document.documentElement.classList.toggle("is-edge", isEdge);
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
-}
-
-function prepareGlitchTitle() {
-  if (!glitchTitle) return;
-  const text = glitchTitle.textContent.trim().replace("，让", "， 让");
-  glitchTitle.dataset.text = text;
-  glitchTitle.textContent = "";
-
-  text.split(" ").forEach((word, wordIndex, words) => {
-    const wordSpan = document.createElement("span");
-    wordSpan.className = "glitch-word";
-
-    Array.from(word).forEach((char) => {
-      const charSpan = document.createElement("span");
-      charSpan.className = "glitch-char";
-      charSpan.textContent = char;
-      wordSpan.appendChild(charSpan);
-    });
-
-    glitchTitle.appendChild(wordSpan);
-
-    if (wordIndex < words.length - 1) {
-      const space = document.createElement("span");
-      space.className = "glitch-space";
-      space.textContent = " ";
-      glitchTitle.appendChild(space);
-    }
-  });
-
-  glitchChars = Array.from(glitchTitle.querySelectorAll(".glitch-char"));
 }
 
 function resizeCanvas() {
@@ -896,129 +864,6 @@ async function copyProofDetails() {
   }, 1600);
 }
 
-function updateParallax(event) {
-  if (!heroFrame) return;
-  if (isEdge) {
-    const rect = heroFrame.getBoundingClientRect();
-    const localX = (event.clientX - rect.left) / Math.max(1, rect.width);
-    const localY = (event.clientY - rect.top) / Math.max(1, rect.height);
-    const x = (localX - 0.5) * 2;
-    const y = (localY - 0.5) * 2;
-    const xPercent = localX * 100;
-    const yPercent = localY * 100;
-    heroFrame.style.setProperty("--cursor-x", `${xPercent}%`);
-    heroFrame.style.setProperty("--cursor-y", `${yPercent}%`);
-    heroFrame.style.setProperty("--edge-window-x", `${x * -8}px`);
-    heroFrame.style.setProperty("--edge-window-y", `${y * -6 - 5}px`);
-    heroFrame.style.setProperty("--edge-title-x", `${x * -4}px`);
-    heroFrame.style.setProperty("--edge-title-y", `${y * -3}px`);
-    return;
-  }
-  const rect = heroFrame.getBoundingClientRect();
-  const x = ((event.clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
-  const y = ((event.clientY - rect.top) / Math.max(1, rect.height) - 0.5) * 2;
-  const xPercent = ((event.clientX - rect.left) / Math.max(1, rect.width)) * 100;
-  const yPercent = ((event.clientY - rect.top) / Math.max(1, rect.height)) * 100;
-
-  heroFrame.style.setProperty("--cursor-x", `${xPercent}%`);
-  heroFrame.style.setProperty("--cursor-y", `${yPercent}%`);
-  heroFrame.style.setProperty("--stage-x", `${x * -22}px`);
-  heroFrame.style.setProperty("--stage-y", `${y * -14}px`);
-  heroFrame.style.setProperty("--edge-title-x", `${x * -4}px`);
-  heroFrame.style.setProperty("--edge-title-y", `${y * -3}px`);
-
-  parallaxItems.forEach((item) => {
-    const depth = Number(item.dataset.depth || 0);
-    item.style.setProperty("--px", `${x * depth * 120}px`);
-    item.style.setProperty("--py", `${y * depth * 90}px`);
-  });
-}
-
-function resetParallax() {
-  if (heroFrame) {
-    heroFrame.classList.remove("glitch-active", "motion-active");
-    heroFrame.style.setProperty("--stage-x", "0px");
-    heroFrame.style.setProperty("--stage-y", "0px");
-    heroFrame.style.setProperty("--edge-window-x", "0px");
-    heroFrame.style.setProperty("--edge-window-y", "0px");
-    heroFrame.style.setProperty("--edge-title-x", "0px");
-    heroFrame.style.setProperty("--edge-title-y", "0px");
-  }
-  parallaxItems.forEach((item) => {
-    item.style.setProperty("--px", "0px");
-    item.style.setProperty("--py", "0px");
-  });
-  glitchChars.forEach((char) => {
-    char.classList.remove("disturbed");
-    char.style.setProperty("--jx", "0px");
-    char.style.setProperty("--jy", "0px");
-    char.style.setProperty("--jr", "0deg");
-  });
-}
-
-function updateGlitchTitle(event) {
-  if (!heroFrame || !glitchTitle || !glitchChars.length) return;
-  const titleRect = glitchTitle.getBoundingClientRect();
-  const cursorNearTitle =
-    event.clientX > titleRect.left - 90 &&
-    event.clientX < titleRect.right + 90 &&
-    event.clientY > titleRect.top - 110 &&
-    event.clientY < titleRect.bottom + 110;
-
-  heroFrame.classList.toggle("glitch-active", cursorNearTitle);
-
-  if (!cursorNearTitle) {
-    glitchChars.forEach((char) => {
-      char.classList.remove("disturbed");
-      char.style.setProperty("--jx", "0px");
-      char.style.setProperty("--jy", "0px");
-      char.style.setProperty("--jr", "0deg");
-    });
-    return;
-  }
-
-  glitchChars.forEach((char, index) => {
-    const rect = char.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = cx - event.clientX;
-    const dy = cy - event.clientY;
-    const distance = Math.hypot(dx, dy);
-    const radius = window.innerWidth < 680 ? 92 : 142;
-    const force = Math.max(0, 1 - distance / radius);
-
-    if (force > 0) {
-      const directionX = dx === 0 ? 0 : dx / Math.max(1, distance);
-      const directionY = dy === 0 ? 0 : dy / Math.max(1, distance);
-      const jitter = ((index % 5) - 2) * force;
-      const mobileFactor = window.innerWidth < 680 ? 0.58 : 1;
-      char.classList.add("disturbed");
-      char.style.setProperty("--jx", `${(directionX * force * 15 + jitter) * mobileFactor}px`);
-      char.style.setProperty("--jy", `${(directionY * force * 11 - jitter) * mobileFactor}px`);
-      char.style.setProperty("--jr", `${((index % 2 ? 1 : -1) * force * 5) * mobileFactor}deg`);
-    } else {
-      char.classList.remove("disturbed");
-      char.style.setProperty("--jx", "0px");
-      char.style.setProperty("--jy", "0px");
-      char.style.setProperty("--jr", "0deg");
-    }
-  });
-}
-
-function queuePointerFrame(event) {
-  if (!canvasVisible) return;
-  pointer = { x: event.clientX, y: event.clientY, active: true };
-  if (heroFrame) {
-    heroFrame.classList.add("motion-active");
-  }
-  if (pointerFrame) return;
-  pointerFrame = requestAnimationFrame(() => {
-    updateParallax(event);
-    updateGlitchTitle(event);
-    pointerFrame = null;
-  });
-}
-
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -1247,15 +1092,6 @@ window.addEventListener("resize", setupHorizontalWork);
 window.addEventListener("scroll", handleScroll, { passive: true });
 workViewport?.addEventListener("scroll", updateMobileWorkProgress, { passive: true });
 
-if (heroFrame) {
-  heroFrame.addEventListener("pointermove", queuePointerFrame);
-  heroFrame.addEventListener("pointerleave", () => {
-    pointer.active = false;
-    resetParallax();
-  });
-}
-
-prepareGlitchTitle();
 initHeroVideoLoop();
 initInteractionLab();
 resizeCanvas();
