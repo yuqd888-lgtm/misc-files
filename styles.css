@@ -7756,3 +7756,175 @@ main > .content-section:not(#hero) .interaction-open-button {
   color: #030303 !important;
   -webkit-text-fill-color: #030303 !important;
 }
+
+/* Lightweight layout: static hero, native scrolling, and one Lab card. */
+html body .hero-frame.hero-video-bg {
+  background: #08070b url("assets/hero-loop-still.jpg") center / cover no-repeat !important;
+}
+
+html body .site-shell *,
+html body .site-shell *::before,
+html body .site-shell *::after {
+  animation: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  will-change: auto !important;
+}
+
+html body .site-shell .reveal,
+html body .site-shell .reveal.visible {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+html body .site-shell .content-section::before,
+html body .site-shell .content-section::after,
+html body .site-shell .decomposed-section::before,
+html body .site-shell .decomposed-section::after {
+  display: none !important;
+}
+
+html body .site-shell .site-header {
+  background: #050505 !important;
+  box-shadow: none !important;
+}
+
+html body .site-shell .work-island {
+  height: auto !important;
+  overflow: visible !important;
+  padding-block: clamp(48px, 7vw, 88px) !important;
+}
+
+html body .site-shell .work-sticky {
+  position: static !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+html body .site-shell .work-viewport {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  scroll-snap-type: none !important;
+}
+
+html body .site-shell .work-island .work-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  height: auto !important;
+  gap: 20px !important;
+  transform: none !important;
+}
+
+html body .site-shell .work-island .project-board {
+  display: flex !important;
+  flex-direction: column !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  flex: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scroll-snap-align: none !important;
+}
+
+html body .site-shell .project-board .work-visual {
+  height: 230px !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+html body .site-shell .project-board .work-visual img {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 10px !important;
+  border: 0 !important;
+  object-fit: contain !important;
+}
+
+html body .site-shell .project-board > div:not(.work-visual) {
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 22px !important;
+}
+
+html body .site-shell .project-board h3 {
+  font-size: clamp(24px, 2.5vw, 34px) !important;
+}
+
+html body .site-shell .work-meta,
+html body .site-shell .visual-chrome,
+html body .site-shell .work-visual > span {
+  display: none !important;
+}
+
+html body .site-shell .interaction-gallery-shell {
+  height: auto !important;
+  min-height: 0 !important;
+  margin-top: 28px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  perspective: none !important;
+  cursor: auto !important;
+}
+
+html body .site-shell .interaction-gallery-shell::before,
+html body .site-shell .interaction-gallery-shell::after {
+  display: none !important;
+}
+
+html body .site-shell .interaction-gallery-track {
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
+html body .site-shell .interaction-card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: min(100%, 620px) !important;
+  min-height: 330px !important;
+  margin-inline: auto !important;
+  aspect-ratio: auto !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+html body .site-shell :is(.project-board, .service-card, .note-card, .process-card, .faq-item, .interaction-card) {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+@media (max-width: 760px) {
+  html body .site-shell .work-island .work-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body .site-shell .project-board .work-visual {
+    height: 210px !important;
+  }
+}
+
+html body .site-shell :is(
+  .project-board .work-visual,
+  .notes-list.paper-index,
+  .paper-index .note-row,
+  .paper-index .note-row > span,
+  .paper-index .note-row em
+) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}

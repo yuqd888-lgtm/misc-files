@@ -1,15 +1,6 @@
-const canvas = document.getElementById("heroCanvas");
 const isEdge = /\bEdg\//.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const useCanvas = false;
-const ctx = canvas && useCanvas ? canvas.getContext("2d", { alpha: true }) : null;
-const sectionLinks = Array.from(document.querySelectorAll(".scroll-index a"));
-const sections = Array.from(document.querySelectorAll("section[id]:not([hidden])"));
-const revealItems = Array.from(document.querySelectorAll(".reveal"));
 const siteHeader = document.querySelector(".site-header");
-const heroFrame = document.querySelector("[data-parallax-root]");
-const heroLoopVideo = document.querySelector("[data-hero-loop-video]");
-const heroMotionToggle = document.querySelector("[data-hero-motion-toggle]");
 const copyTemplateButton = document.querySelector("[data-copy-template]");
 const consultTemplate = document.getElementById("consult-template");
 const proofCards = Array.from(document.querySelectorAll("[data-proof-card]"));
@@ -21,13 +12,6 @@ const proofModalTitle = document.querySelector("[data-proof-modal-title]");
 const proofModalDetails = document.querySelector("[data-proof-modal-details]");
 const proofModalCopy = document.querySelector("[data-proof-copy]");
 const proofModalContact = document.querySelector("[data-proof-contact]");
-const horizontalWork = document.querySelector("[data-horizontal-work]");
-const workViewport = document.querySelector("[data-work-viewport]");
-const workTrack = document.querySelector("[data-work-track]");
-const workCards = Array.from(document.querySelectorAll("[data-work-track] .project-board"));
-const workCurrent = document.querySelector("[data-work-current]");
-const interactionGallery = document.querySelector("[data-interaction-gallery]");
-const interactionCards = Array.from(document.querySelectorAll("[data-interaction-card]"));
 const interactionModal = document.querySelector("[data-interaction-modal]");
 const modalDotFieldMount = document.querySelector("[data-interaction-modal-dot]");
 const interactionOpenButtons = Array.from(document.querySelectorAll("[data-interaction-open]"));
@@ -41,68 +25,8 @@ const swapPrevButton = document.querySelector("[data-swap-prev]");
 const swapNextButton = document.querySelector("[data-swap-next]");
 const proofOpenButtons = Array.from(document.querySelectorAll("[data-proof-open]"));
 let activeProofCard = null;
-let scrollFrame = null;
-let scrollResumeTimer = null;
-let workResizeFrame = null;
-let swapTimer = null;
 let swapIndex = 0;
-let canvasFrame = null;
-let canvasVisible = true;
-let scrolling = false;
-let lastCanvasTime = 0;
-let lastActiveUpdate = 0;
-let workEnabled = false;
-let workMaxX = 0;
-let interactionGalleryFrame = null;
-let interactionGalleryCurrent = 0;
-let interactionGalleryTarget = 0;
-let interactionGalleryDragging = false;
-let interactionGalleryStartX = 0;
-let interactionGalleryStartTarget = 0;
-let interactionGalleryVisible = false;
 let dotFieldInstances = [];
-
-function initHeroVideoLoop() {
-  if (!heroLoopVideo || !heroFrame || !heroMotionToggle) return;
-
-  let visible = false;
-  let motionEnabled = false;
-  const updateToggle = () => {
-    heroMotionToggle.textContent = motionEnabled ? "暂停动态背景" : "播放动态背景";
-    heroMotionToggle.setAttribute("aria-pressed", String(motionEnabled));
-  };
-
-  const syncPlayback = () => {
-    if (!motionEnabled || !visible || document.hidden) {
-      heroLoopVideo.pause();
-      return;
-    }
-
-    if (heroLoopVideo.paused) {
-      const promise = heroLoopVideo.play();
-      if (promise && typeof promise.catch === "function") {
-        promise.catch(() => {
-          motionEnabled = false;
-          updateToggle();
-        });
-      }
-    }
-  };
-
-  heroMotionToggle.addEventListener("click", () => {
-    motionEnabled = !motionEnabled;
-    updateToggle();
-    syncPlayback();
-  });
-
-  const observer = new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    syncPlayback();
-  }, { threshold: 0.02 });
-
-  observer.observe(heroFrame);
-  document.addEventListener("visibilitychange", syncPlayback);
-}
 
 const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -142,7 +66,7 @@ function initDotField(mount) {
 
   const options = {
     dotRadius: 1.5,
-    dotSpacing: 14,
+    dotSpacing: 20,
     bulgeStrength: 67,
     glowRadius: 160,
     cursorRadius: 500,
@@ -199,7 +123,7 @@ function initDotField(mount) {
     const rect = wrapper.getBoundingClientRect();
     width = Math.max(1, rect.width);
     height = Math.max(1, rect.height);
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     dotCanvas.width = Math.round(width * dpr);
     dotCanvas.height = Math.round(height * dpr);
     dotCanvas.style.width = `${width}px`;
@@ -244,7 +168,10 @@ function initDotField(mount) {
       dotCtx.fill();
     });
 
-    if (!prefersReducedMotion) refresh();
+    if (!prefersReducedMotion && mouse.active &&
+        (Math.abs(smoothMouse.x - mouse.x) > 0.001 || Math.abs(smoothMouse.y - mouse.y) > 0.001)) {
+      refresh();
+    }
   };
 
   wrapper.addEventListener("pointermove", (event) => {
@@ -254,12 +181,12 @@ function initDotField(mount) {
     mouse.active = true;
     wrapper.style.setProperty("--cursor-x", `${mouse.x * 100}%`);
     wrapper.style.setProperty("--cursor-y", `${mouse.y * 100}%`);
-    if (prefersReducedMotion) refresh();
+    refresh();
   });
 
   wrapper.addEventListener("pointerleave", () => {
     mouse.active = false;
-    if (prefersReducedMotion) refresh();
+    refresh();
   });
 
   const observer = new IntersectionObserver(([entry]) => {
@@ -283,7 +210,6 @@ function openInteractionModal() {
     dotFieldInstances = [initDotField(modalDotFieldMount)].filter(Boolean);
   }
   dotFieldInstances.forEach((instance) => instance.refresh());
-  stopInteractionGallery();
   requestAnimationFrame(() => {
     dotFieldInstances.forEach((instance) => instance.resize());
   });
@@ -294,390 +220,29 @@ function closeInteractionModal() {
   interactionModal.hidden = true;
   document.body.classList.remove("interaction-modal-open", "modal-open");
   dotFieldInstances.forEach((instance) => instance.refresh());
-  scheduleInteractionGallery();
-}
-
-function stopInteractionGallery() {
-  if (interactionGalleryFrame !== null) cancelAnimationFrame(interactionGalleryFrame);
-  interactionGalleryFrame = null;
-}
-
-function scheduleInteractionGallery() {
-  if (interactionGalleryFrame !== null || !interactionGalleryVisible ||
-      !interactionGallery || window.innerWidth <= 760 || prefersReducedMotion ||
-      document.hidden || (interactionModal && !interactionModal.hidden)) return;
-  interactionGalleryFrame = requestAnimationFrame(updateInteractionGallery);
-}
-
-function updateInteractionGallery() {
-  interactionGalleryFrame = null;
-  if (!interactionGalleryVisible || !interactionGallery || !interactionCards.length ||
-      window.innerWidth <= 760 || document.hidden) return;
-
-  const remaining = interactionGalleryTarget - interactionGalleryCurrent;
-  interactionGalleryCurrent = Math.abs(remaining) < 0.01
-    ? interactionGalleryTarget
-    : interactionGalleryCurrent + remaining * 0.05;
-  const count = interactionCards.length;
-  const rect = interactionGallery.getBoundingClientRect();
-  const radius = Math.max(420, rect.width * 0.48);
-  const angleStep = Math.PI / 7;
-  const centerOffset = count * 500;
-
-  interactionCards.forEach((card, index) => {
-    const rawOffset = index - (interactionGalleryCurrent % count);
-    const wrappedOffset = ((rawOffset + count / 2 + centerOffset) % count) - count / 2;
-    const angle = wrappedOffset * angleStep;
-    const depth = Math.cos(angle);
-    const x = Math.sin(angle) * radius;
-    const z = depth * radius - radius;
-    const y = Math.abs(wrappedOffset) * Math.abs(wrappedOffset) * 9;
-    const rotateY = -angle * 0.78;
-    const rotateZ = wrappedOffset * -1.8;
-    const opacity = clampNumber(1.18 - Math.abs(wrappedOffset) * 0.18, 0.16, 1);
-    const brightness = clampNumber(1.08 - Math.abs(wrappedOffset) * 0.12, 0.42, 1);
-
-    card.style.zIndex = String(Math.round((depth + 1) * 100));
-    card.style.opacity = String(opacity);
-    card.style.filter = `brightness(${brightness})`;
-    card.style.transform = [
-      "translate(-50%, -50%)",
-      `translate3d(${x}px, ${y}px, ${z}px)`,
-      `rotateY(${rotateY}rad)`,
-      `rotateZ(${rotateZ}deg)`,
-    ].join(" ");
-  });
-
-  if (interactionGalleryCurrent !== interactionGalleryTarget) scheduleInteractionGallery();
-}
-
-function resetInteractionGalleryMobile() {
-  if (window.innerWidth > 760) {
-    scheduleInteractionGallery();
-    return;
-  }
-  stopInteractionGallery();
-  interactionCards.forEach((card) => {
-    card.style.removeProperty("z-index");
-    card.style.removeProperty("opacity");
-    card.style.removeProperty("filter");
-    card.style.removeProperty("transform");
-  });
 }
 
 function initInteractionLab() {
-  if (!interactionGallery || !interactionCards.length) return;
-
   interactionOpenButtons.forEach((button) => {
-    button.addEventListener("pointerdown", (event) => {
-      event.stopPropagation();
-    });
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      openInteractionModal();
-    });
+    button.addEventListener("click", openInteractionModal);
   });
 
   interactionCloseControls.forEach((control) => {
     control.addEventListener("click", closeInteractionModal);
   });
 
-  interactionContact?.addEventListener("click", () => {
-    closeInteractionModal();
-  });
-
+  interactionContact?.addEventListener("click", closeInteractionModal);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && interactionModal && !interactionModal.hidden) {
       closeInteractionModal();
     }
   });
-
-  interactionGallery.addEventListener("wheel", (event) => {
-    if (window.innerWidth <= 760) return;
-    event.preventDefault();
-    interactionGalleryTarget += (event.deltaY || event.deltaX) * 0.012;
-    scheduleInteractionGallery();
-  }, { passive: false });
-
-  interactionGallery.addEventListener("pointerdown", (event) => {
-    if (window.innerWidth <= 760) return;
-    interactionGalleryDragging = true;
-    interactionGalleryStartX = event.clientX;
-    interactionGalleryStartTarget = interactionGalleryTarget;
-    interactionGallery.classList.add("is-dragging");
-    interactionGallery.setPointerCapture(event.pointerId);
-  });
-
-  interactionGallery.addEventListener("pointermove", (event) => {
-    if (!interactionGalleryDragging || window.innerWidth <= 760) return;
-    const distance = event.clientX - interactionGalleryStartX;
-    interactionGalleryTarget = interactionGalleryStartTarget - distance * 0.036;
-    scheduleInteractionGallery();
-  });
-
-  const stopDragging = (event) => {
-    interactionGalleryDragging = false;
-    interactionGallery.classList.remove("is-dragging");
-    if (interactionGallery.hasPointerCapture(event.pointerId)) {
-      interactionGallery.releasePointerCapture(event.pointerId);
-    }
-  };
-
-  interactionGallery.addEventListener("pointerup", stopDragging);
-  interactionGallery.addEventListener("pointercancel", stopDragging);
-  window.addEventListener("resize", resetInteractionGalleryMobile);
-
-  if (!prefersReducedMotion) {
-    const observer = new IntersectionObserver(([entry]) => {
-      interactionGalleryVisible = entry.isIntersecting;
-      if (interactionGalleryVisible) scheduleInteractionGallery();
-      else stopInteractionGallery();
-    }, { threshold: 0.01 });
-    observer.observe(interactionGallery);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopInteractionGallery();
-      else scheduleInteractionGallery();
-    });
-  } else {
-    resetInteractionGalleryMobile();
-  }
 }
-let workScrollDistance = 1;
-
-let width = 0;
-let height = 0;
-let dpr = 1;
-let nodes = [];
-let pointer = { x: 0, y: 0, active: false };
 
 document.documentElement.classList.toggle("is-edge", isEdge);
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
-}
-
-function resizeCanvas() {
-  if (!ctx) return;
-  dpr = prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio || 1, isEdge ? 1.2 : 1.6);
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  const density = isEdge ? 30000 : 22000;
-  const minNodes = isEdge ? 28 : 38;
-  const maxNodes = isEdge ? 52 : 72;
-  const nodeCount = Math.min(maxNodes, Math.max(minNodes, Math.floor((width * height) / density)));
-  nodes = Array.from({ length: nodeCount }, (_, index) => ({
-    x: (index * 197) % width,
-    y: (index * 113) % height,
-    vx: (Math.random() - 0.5) * 0.32,
-    vy: (Math.random() - 0.5) * 0.32,
-    r: Math.random() * 1.8 + 0.8
-  }));
-}
-
-function canAnimateCanvas() {
-  return useCanvas && Boolean(ctx) && canvasVisible && !scrolling && width > 0 && height > 0;
-}
-
-function scheduleCanvas() {
-  if (canvasFrame || !canAnimateCanvas()) return;
-  canvasFrame = requestAnimationFrame(drawCanvas);
-}
-
-function drawCanvas(timestamp = 0) {
-  canvasFrame = null;
-  if (!canAnimateCanvas()) return;
-
-  const minFrameGap = isEdge ? 34 : 24;
-  if (timestamp - lastCanvasTime < minFrameGap) {
-    scheduleCanvas();
-    return;
-  }
-  lastCanvasTime = timestamp;
-
-  ctx.clearRect(0, 0, width, height);
-
-  nodes.forEach((node) => {
-    node.x += node.vx;
-    node.y += node.vy;
-
-    if (node.x < -20) node.x = width + 20;
-    if (node.x > width + 20) node.x = -20;
-    if (node.y < -20) node.y = height + 20;
-    if (node.y > height + 20) node.y = -20;
-
-    if (pointer.active) {
-      const dx = pointer.x - node.x;
-      const dy = pointer.y - node.y;
-      const distance = Math.hypot(dx, dy);
-      if (distance < 170) {
-        node.x -= dx * 0.002;
-        node.y -= dy * 0.002;
-      }
-    }
-  });
-
-  for (let i = 0; i < nodes.length; i += 1) {
-    for (let j = i + 1; j < nodes.length; j += 1) {
-      const a = nodes[i];
-      const b = nodes[j];
-      const distance = Math.hypot(a.x - b.x, a.y - b.y);
-      if (distance < 135) {
-        const alpha = 1 - distance / 135;
-        ctx.strokeStyle = `rgba(126, 231, 200, ${alpha * 0.22})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
-      }
-    }
-  }
-
-  nodes.forEach((node) => {
-    ctx.fillStyle = "rgba(126, 231, 200, 0.72)";
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  if (pointer.active) {
-    const glow = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 240);
-    glow.addColorStop(0, "rgba(246, 173, 85, 0.18)");
-    glow.addColorStop(1, "rgba(246, 173, 85, 0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(pointer.x - 240, pointer.y - 240, 480, 480);
-  }
-
-  scheduleCanvas();
-}
-
-function updateActiveSection() {
-  const center = window.scrollY + window.innerHeight * 0.45;
-  let active = sections[0]?.id;
-
-  sections.forEach((section) => {
-    if (section.offsetTop <= center) {
-      active = section.id;
-    }
-  });
-
-  sectionLinks.forEach((link) => {
-    link.classList.toggle("active", link.getAttribute("href") === `#${active}`);
-  });
-}
-
-function updateHeroScroll() {
-  if (!heroFrame) return;
-  if (window.scrollY > window.innerHeight * 1.15) return;
-  const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight * 0.72)));
-  heroFrame.style.setProperty("--hero-opacity", String(1 - progress * 0.46));
-  heroFrame.style.setProperty("--hero-shift", `${progress * 54}px`);
-  heroFrame.style.setProperty("--hero-scale", String(1 + progress * 0.08));
-}
-
-function setupHorizontalWork() {
-  if (!horizontalWork || !workViewport || !workTrack || workCards.length < 2) return;
-  if (workResizeFrame) cancelAnimationFrame(workResizeFrame);
-
-  workResizeFrame = requestAnimationFrame(() => {
-    const desktopQuery = window.matchMedia("(min-width: 981px) and (hover: hover)");
-    workEnabled = desktopQuery.matches && !prefersReducedMotion;
-    document.documentElement.classList.toggle("horizontal-work-ready", workEnabled);
-
-    if (!workEnabled) {
-      horizontalWork.style.removeProperty("--work-scroll-height");
-      horizontalWork.style.setProperty("--work-progress", "0");
-      horizontalWork.style.setProperty("--work-track-x", "0px");
-      workCards.forEach((card) => {
-        card.classList.remove("is-work-active");
-        card.style.removeProperty("--work-card-scale");
-        card.style.removeProperty("--work-card-y");
-        card.style.removeProperty("--work-card-opacity");
-      });
-      return;
-    }
-
-    workMaxX = Math.max(0, workTrack.scrollWidth - workViewport.clientWidth);
-    workScrollDistance = Math.max(window.innerHeight * 1.55, workMaxX * (isEdge ? 1.12 : 1.02));
-    horizontalWork.style.setProperty("--work-scroll-height", `${window.innerHeight + workScrollDistance}px`);
-    updateHorizontalWork();
-    workResizeFrame = null;
-  });
-}
-
-function updateHorizontalWork() {
-  if (!workEnabled || !horizontalWork || !workViewport || !workTrack) return;
-
-  const stickyTop = 76;
-  const sectionStart = horizontalWork.offsetTop - stickyTop;
-  const progress = Math.min(1, Math.max(0, (window.scrollY - sectionStart) / workScrollDistance));
-  const trackX = -workMaxX * progress;
-  const viewportCenter = workViewport.clientWidth * 0.5;
-  let activeIndex = 0;
-  let nearestDistance = Infinity;
-
-  horizontalWork.style.setProperty("--work-progress", progress.toFixed(4));
-  horizontalWork.style.setProperty("--work-track-x", `${trackX.toFixed(2)}px`);
-
-  workCards.forEach((card, index) => {
-    const cardCenter = card.offsetLeft + card.offsetWidth * 0.5 + trackX;
-    const distance = Math.abs(cardCenter - viewportCenter);
-    const focus = Math.max(0, 1 - distance / Math.max(viewportCenter, card.offsetWidth));
-    const scale = (isEdge ? 0.95 : 0.92) + focus * (isEdge ? 0.05 : 0.08);
-    const opacity = (isEdge ? 0.7 : 0.58) + focus * (isEdge ? 0.3 : 0.42);
-
-    card.style.setProperty("--work-card-scale", scale.toFixed(4));
-    card.style.setProperty("--work-card-y", `${((1 - focus) * (isEdge ? 10 : 18)).toFixed(2)}px`);
-    card.style.setProperty("--work-card-opacity", opacity.toFixed(4));
-
-    if (distance < nearestDistance) {
-      nearestDistance = distance;
-      activeIndex = index;
-    }
-  });
-
-  workCards.forEach((card, index) => card.classList.toggle("is-work-active", index === activeIndex));
-  if (workCurrent) workCurrent.textContent = String(activeIndex + 1).padStart(2, "0");
-}
-
-function updateMobileWorkProgress() {
-  if (workEnabled || !horizontalWork || !workViewport || workCards.length < 2) return;
-  const maxScroll = Math.max(1, workViewport.scrollWidth - workViewport.clientWidth);
-  const progress = Math.min(1, Math.max(0, workViewport.scrollLeft / maxScroll));
-  const activeIndex = Math.min(workCards.length - 1, Math.round(progress * (workCards.length - 1)));
-  horizontalWork.style.setProperty("--work-progress", progress.toFixed(4));
-  if (workCurrent) workCurrent.textContent = String(activeIndex + 1).padStart(2, "0");
-}
-
-function handleScroll() {
-  scrolling = true;
-  if (scrollResumeTimer) {
-    window.clearTimeout(scrollResumeTimer);
-  }
-
-  scrollResumeTimer = window.setTimeout(() => {
-    scrolling = false;
-    scheduleCanvas();
-  }, isEdge ? 180 : 120);
-
-  if (scrollFrame) return;
-  scrollFrame = requestAnimationFrame(() => {
-    const now = performance.now();
-    if (!isEdge || now - lastActiveUpdate > 120) {
-      updateActiveSection();
-      lastActiveUpdate = now;
-    }
-    updateHeroScroll();
-    updateHorizontalWork();
-    scrollFrame = null;
-  });
 }
 
 function getProofCardText(card) {
@@ -864,55 +429,6 @@ async function copyProofDetails() {
   }, 1600);
 }
 
-const revealObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.16 }
-);
-
-revealItems.forEach((item) => revealObserver.observe(item));
-
-function releaseVisibleReveals() {
-  revealItems.forEach((item) => {
-    if (item.classList.contains("visible")) return;
-    const rect = item.getBoundingClientRect();
-    const withinViewport = rect.top < window.innerHeight * 1.18 && rect.bottom > -window.innerHeight * 0.18;
-    if (withinViewport) {
-      item.classList.add("visible");
-      revealObserver.unobserve(item);
-    }
-  });
-}
-
-window.addEventListener("load", () => {
-  setTimeout(releaseVisibleReveals, 900);
-});
-
-window.addEventListener("hashchange", () => {
-  setTimeout(releaseVisibleReveals, 450);
-});
-
-const heroObserver = new IntersectionObserver(
-  ([entry]) => {
-    canvasVisible = entry.isIntersecting;
-    if (canvasVisible) {
-      scheduleCanvas();
-    }
-  },
-  { threshold: 0.02 }
-);
-
-const heroSection = document.getElementById("hero");
-if (heroSection) {
-  heroObserver.observe(heroSection);
-}
-
 function navigateToSection(targetId, { replace = false } = {}) {
   if (!targetId || targetId === "#") return;
 
@@ -933,9 +449,6 @@ function navigateToSection(targetId, { replace = false } = {}) {
 
   requestAnimationFrame(() => {
     root.style.scrollBehavior = previousScrollBehavior;
-    updateActiveSection();
-    updateHeroScroll();
-    updateHorizontalWork();
   });
 }
 
@@ -972,23 +485,6 @@ function setValidationSwap(index) {
   updateValidationSwap();
 }
 
-function stopValidationSwap() {
-  if (!swapTimer) return;
-  window.clearInterval(swapTimer);
-  swapTimer = null;
-}
-
-function startValidationSwap() {
-  stopValidationSwap();
-  updateValidationSwap();
-
-  if (!validationSwap || swapCards.length < 2 || prefersReducedMotion) return;
-
-  swapTimer = window.setInterval(() => {
-    setValidationSwap(swapIndex + 1);
-  }, 5000);
-}
-
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     const targetId = link.getAttribute("href");
@@ -998,11 +494,6 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     navigateToSection(targetId, { replace: targetId === "#hero" });
   });
 });
-
-if (validationSwap) {
-  validationSwap.addEventListener("mouseenter", stopValidationSwap);
-  validationSwap.addEventListener("mouseleave", startValidationSwap);
-}
 
 swapCards.forEach((card, index) => {
   card.addEventListener("click", () => {
@@ -1035,7 +526,6 @@ proofOpenButtons.forEach((button) => {
   });
 });
 
-startValidationSwap();
 
 proofCards.forEach((card) => {
   card.addEventListener("click", () => openProofModal(card));
@@ -1087,27 +577,13 @@ if (copyTemplateButton && consultTemplate) {
   });
 }
 
-window.addEventListener("resize", resizeCanvas);
-window.addEventListener("resize", setupHorizontalWork);
-window.addEventListener("scroll", handleScroll, { passive: true });
-workViewport?.addEventListener("scroll", updateMobileWorkProgress, { passive: true });
-
-initHeroVideoLoop();
 initInteractionLab();
-resizeCanvas();
-setupHorizontalWork();
 if (window.location.hash === "#hero") {
   window.scrollTo(0, 0);
 }
-updateActiveSection();
-updateHeroScroll();
-scheduleCanvas();
 
 window.addEventListener("load", () => {
   if (!window.location.hash || window.location.hash === "#hero") {
     window.scrollTo(0, 0);
-    updateActiveSection();
-    updateHeroScroll();
-    updateHorizontalWork();
   }
 });
