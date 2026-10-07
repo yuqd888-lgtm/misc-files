@@ -6913,6 +6913,28 @@ section[hidden],
   opacity: 1;
 }
 
+.hero-motion-toggle {
+  position: absolute !important;
+  right: 24px;
+  top: 24px;
+  z-index: 9 !important;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.56);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hero-motion-toggle:hover,
+.hero-motion-toggle:focus-visible {
+  background: rgba(0, 0, 0, 0.82);
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: 2px;
+}
+
 .hero-frame.hero-video-bg .mini-links,
 .hero-frame.hero-video-bg .mini-menu,
 .hero-frame.hero-video-bg .hero-copy .eyebrow,
@@ -6927,6 +6949,11 @@ section[hidden],
   .hero-loop-video {
     object-position: center top;
     transform: scale(1.12);
+  }
+
+  .hero-motion-toggle {
+    right: 12px;
+    top: 12px;
   }
 }
 

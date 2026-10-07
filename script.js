@@ -8,7 +8,8 @@ const sections = Array.from(document.querySelectorAll("section[id]:not([hidden])
 const revealItems = Array.from(document.querySelectorAll(".reveal"));
 const siteHeader = document.querySelector(".site-header");
 const heroFrame = document.querySelector("[data-parallax-root]");
-const heroLoopVideos = Array.from(document.querySelectorAll("[data-hero-loop-video]"));
+const heroLoopVideo = document.querySelector("[data-hero-loop-video]");
+const heroMotionToggle = document.querySelector("[data-hero-motion-toggle]");
 const parallaxItems = Array.from(document.querySelectorAll("[data-depth]"));
 const glitchTitle = document.querySelector("[data-glitch-title]");
 const copyTemplateButton = document.querySelector("[data-copy-template]");
@@ -62,88 +63,49 @@ let interactionGalleryTarget = 0;
 let interactionGalleryDragging = false;
 let interactionGalleryStartX = 0;
 let interactionGalleryStartTarget = 0;
+let interactionGalleryVisible = false;
 let dotFieldInstances = [];
 
 function initHeroVideoLoop() {
-  if (heroLoopVideos.length < 2) return;
+  if (!heroLoopVideo || !heroFrame || !heroMotionToggle) return;
 
-  const fadeMs = 720;
-  const fadeSeconds = fadeMs / 1000;
-  let activeIndex = 0;
-  let switching = false;
-  let monitorFrame = null;
+  let visible = false;
+  let motionEnabled = false;
+  const updateToggle = () => {
+    heroMotionToggle.textContent = motionEnabled ? "暂停动态背景" : "播放动态背景";
+    heroMotionToggle.setAttribute("aria-pressed", String(motionEnabled));
+  };
 
-  heroLoopVideos.forEach((video, index) => {
-    video.muted = true;
-    video.loop = false;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "");
-    video.classList.toggle("is-active", index === activeIndex);
-    video.setAttribute("aria-hidden", index === activeIndex ? "false" : "true");
+  const syncPlayback = () => {
+    if (!motionEnabled || !visible || document.hidden) {
+      heroLoopVideo.pause();
+      return;
+    }
+
+    if (heroLoopVideo.paused) {
+      const promise = heroLoopVideo.play();
+      if (promise && typeof promise.catch === "function") {
+        promise.catch(() => {
+          motionEnabled = false;
+          updateToggle();
+        });
+      }
+    }
+  };
+
+  heroMotionToggle.addEventListener("click", () => {
+    motionEnabled = !motionEnabled;
+    updateToggle();
+    syncPlayback();
   });
 
-  const playSafely = (video) => {
-    const promise = video.play();
-    if (promise && typeof promise.catch === "function") {
-      promise.catch(() => {});
-    }
-  };
+  const observer = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    syncPlayback();
+  }, { threshold: 0.02 });
 
-  const swapVideos = () => {
-    if (switching) return;
-
-    const current = heroLoopVideos[activeIndex];
-    const nextIndex = (activeIndex + 1) % heroLoopVideos.length;
-    const next = heroLoopVideos[nextIndex];
-
-    switching = true;
-    next.currentTime = 0;
-    next.setAttribute("aria-hidden", "false");
-    playSafely(next);
-
-    requestAnimationFrame(() => {
-      next.classList.add("is-active");
-      current.classList.remove("is-active");
-      current.setAttribute("aria-hidden", "true");
-    });
-
-    window.setTimeout(() => {
-      current.pause();
-      current.currentTime = 0;
-      activeIndex = nextIndex;
-      switching = false;
-    }, fadeMs + 80);
-  };
-
-  const monitor = () => {
-    const active = heroLoopVideos[activeIndex];
-    const duration = Number.isFinite(active.duration) ? active.duration : 0;
-    const startFadeAt = Math.max(0.2, duration - Math.max(fadeSeconds, 0.82));
-
-    if (duration > 0 && active.currentTime >= startFadeAt) {
-      swapVideos();
-    } else if (!switching && active.ended) {
-      swapVideos();
-    }
-
-    monitorFrame = requestAnimationFrame(monitor);
-  };
-
-  const first = heroLoopVideos[activeIndex];
-  playSafely(first);
-  monitorFrame = requestAnimationFrame(monitor);
-
-  document.addEventListener("visibilitychange", () => {
-    const active = heroLoopVideos[activeIndex];
-    if (document.hidden) {
-      active.pause();
-      if (monitorFrame) cancelAnimationFrame(monitorFrame);
-      monitorFrame = null;
-    } else {
-      playSafely(active);
-      if (!monitorFrame) monitorFrame = requestAnimationFrame(monitor);
-    }
-  });
+  observer.observe(heroFrame);
+  document.addEventListener("visibilitychange", syncPlayback);
 }
 
 const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -202,6 +164,22 @@ function initDotField(mount) {
   let height = 1;
   let dpr = 1;
   let points = [];
+  let visible = false;
+  let frame = null;
+  const modal = mount.closest("[data-interaction-modal]");
+
+  const canRender = () => visible && !document.hidden &&
+    (!modal || !modal.hidden) &&
+    (modal || !interactionModal || interactionModal.hidden);
+
+  const refresh = () => {
+    if (!canRender()) {
+      if (frame !== null) cancelAnimationFrame(frame);
+      frame = null;
+    } else if (frame === null) {
+      frame = requestAnimationFrame(render);
+    }
+  };
 
   const createPoints = () => {
     const cols = Math.ceil(width / options.dotSpacing) + 2;
@@ -232,9 +210,12 @@ function initDotField(mount) {
     dotCanvas.style.height = `${height}px`;
     dotCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     createPoints();
+    refresh();
   };
 
   const render = () => {
+    frame = null;
+    if (!canRender()) return;
     smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
     smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
     const cursorX = smoothMouse.x * width;
@@ -267,7 +248,7 @@ function initDotField(mount) {
       dotCtx.fill();
     });
 
-    requestAnimationFrame(render);
+    if (!prefersReducedMotion) refresh();
   };
 
   wrapper.addEventListener("pointermove", (event) => {
@@ -277,23 +258,33 @@ function initDotField(mount) {
     mouse.active = true;
     wrapper.style.setProperty("--cursor-x", `${mouse.x * 100}%`);
     wrapper.style.setProperty("--cursor-y", `${mouse.y * 100}%`);
+    if (prefersReducedMotion) refresh();
   });
 
   wrapper.addEventListener("pointerleave", () => {
     mouse.active = false;
+    if (prefersReducedMotion) refresh();
   });
 
+  const observer = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    refresh();
+  }, { threshold: 0.01 });
+
+  observer.observe(wrapper);
+  document.addEventListener("visibilitychange", refresh);
   window.addEventListener("resize", resize);
   resize();
-  render();
 
-  return { resize, wrapper };
+  return { resize, refresh, wrapper };
 }
 
 function openInteractionModal() {
   if (!interactionModal) return;
   interactionModal.hidden = false;
   document.body.classList.add("interaction-modal-open", "modal-open");
+  dotFieldInstances.forEach((instance) => instance.refresh());
+  stopInteractionGallery();
   requestAnimationFrame(() => {
     dotFieldInstances.forEach((instance) => instance.resize());
   });
@@ -303,12 +294,31 @@ function closeInteractionModal() {
   if (!interactionModal) return;
   interactionModal.hidden = true;
   document.body.classList.remove("interaction-modal-open", "modal-open");
+  dotFieldInstances.forEach((instance) => instance.refresh());
+  scheduleInteractionGallery();
+}
+
+function stopInteractionGallery() {
+  if (interactionGalleryFrame !== null) cancelAnimationFrame(interactionGalleryFrame);
+  interactionGalleryFrame = null;
+}
+
+function scheduleInteractionGallery() {
+  if (interactionGalleryFrame !== null || !interactionGalleryVisible ||
+      !interactionGallery || window.innerWidth <= 760 || prefersReducedMotion ||
+      document.hidden || (interactionModal && !interactionModal.hidden)) return;
+  interactionGalleryFrame = requestAnimationFrame(updateInteractionGallery);
 }
 
 function updateInteractionGallery() {
-  if (!interactionGallery || !interactionCards.length || window.innerWidth <= 760) return;
+  interactionGalleryFrame = null;
+  if (!interactionGalleryVisible || !interactionGallery || !interactionCards.length ||
+      window.innerWidth <= 760 || document.hidden) return;
 
-  interactionGalleryCurrent += (interactionGalleryTarget - interactionGalleryCurrent) * 0.05;
+  const remaining = interactionGalleryTarget - interactionGalleryCurrent;
+  interactionGalleryCurrent = Math.abs(remaining) < 0.01
+    ? interactionGalleryTarget
+    : interactionGalleryCurrent + remaining * 0.05;
   const count = interactionCards.length;
   const rect = interactionGallery.getBoundingClientRect();
   const radius = Math.max(420, rect.width * 0.48);
@@ -339,11 +349,15 @@ function updateInteractionGallery() {
     ].join(" ");
   });
 
-  interactionGalleryFrame = requestAnimationFrame(updateInteractionGallery);
+  if (interactionGalleryCurrent !== interactionGalleryTarget) scheduleInteractionGallery();
 }
 
 function resetInteractionGalleryMobile() {
-  if (window.innerWidth > 760) return;
+  if (window.innerWidth > 760) {
+    scheduleInteractionGallery();
+    return;
+  }
+  stopInteractionGallery();
   interactionCards.forEach((card) => {
     card.style.removeProperty("z-index");
     card.style.removeProperty("opacity");
@@ -385,6 +399,7 @@ function initInteractionLab() {
     if (window.innerWidth <= 760) return;
     event.preventDefault();
     interactionGalleryTarget += (event.deltaY || event.deltaX) * 0.012;
+    scheduleInteractionGallery();
   }, { passive: false });
 
   interactionGallery.addEventListener("pointerdown", (event) => {
@@ -400,6 +415,7 @@ function initInteractionLab() {
     if (!interactionGalleryDragging || window.innerWidth <= 760) return;
     const distance = event.clientX - interactionGalleryStartX;
     interactionGalleryTarget = interactionGalleryStartTarget - distance * 0.036;
+    scheduleInteractionGallery();
   });
 
   const stopDragging = (event) => {
@@ -415,7 +431,16 @@ function initInteractionLab() {
   window.addEventListener("resize", resetInteractionGalleryMobile);
 
   if (!prefersReducedMotion) {
-    updateInteractionGallery();
+    const observer = new IntersectionObserver(([entry]) => {
+      interactionGalleryVisible = entry.isIntersecting;
+      if (interactionGalleryVisible) scheduleInteractionGallery();
+      else stopInteractionGallery();
+    }, { threshold: 0.01 });
+    observer.observe(interactionGallery);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopInteractionGallery();
+      else scheduleInteractionGallery();
+    });
   } else {
     resetInteractionGalleryMobile();
   }

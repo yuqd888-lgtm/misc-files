@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="鱼秋设计个人工作站｜个人品牌网站与创意落地页">
   <meta property="og:description" content="用审美、内容结构和网页技术，把想法做成可展示、可传播、可接单的页面。">
-  <link rel="stylesheet" href="styles.css?v=black-premium-polish-0620">
+  <link rel="stylesheet" href="styles.css?v=motion-perf-1007b">
 </head>
 <body>
   <div class="site-shell">
@@ -50,16 +50,11 @@
 
     <main>
       <section class="hero section-panel" id="hero">
-        <div class="hero-frame hero-video-bg" data-parallax-root>
-          <video class="hero-loop-video is-active" autoplay muted playsinline preload="metadata" poster="assets/hero-loop-poster.png" aria-label="鱼秋设计首屏循环作品视频" data-hero-loop-video>
-            <source src="assets/hero-loop-user.mp4" type="video/mp4">
-            <source src="assets/hero-loop-preview.webm" type="video/webm">
+        <div class="hero-frame hero-video-bg floating-lines-ready" data-parallax-root>
+          <video class="hero-loop-video is-active" muted playsinline loop preload="none" poster="assets/hero-loop-still.jpg" aria-label="鱼秋设计首屏循环作品视频" data-hero-loop-video>
+            <source src="assets/hero-loop-light.mp4" type="video/mp4">
           </video>
-          <video class="hero-loop-video" muted playsinline preload="auto" poster="assets/hero-loop-poster.png" aria-hidden="true" tabindex="-1" data-hero-loop-video>
-            <source src="assets/hero-loop-user.mp4" type="video/mp4">
-            <source src="assets/hero-loop-preview.webm" type="video/webm">
-          </video>
-          <canvas class="hero-floating-lines" data-floating-lines aria-hidden="true"></canvas>
+          <button class="hero-motion-toggle" type="button" aria-pressed="false" data-hero-motion-toggle>播放动态背景</button>
           <div class="hero-frame-nav">
             <a class="mini-brand" href="#hero">✦ 鱼秋设计个人工作站</a>
             <div class="mini-links" aria-label="Hero links">
@@ -797,7 +792,6 @@
     </main>
   </div>
 
-  <script src="hero-floating-lines.js"></script>
-  <script src="script.js?v=black-premium-polish-0620"></script>
+  <script src="script.js?v=motion-perf-1007b"></script>
 </body>
 </html>
